@@ -184,6 +184,7 @@ const dotTooltipCopy = document.getElementById("dot-tooltip-copy");
 const legend = document.getElementById("legend");
 const barChart = document.getElementById("bar-chart");
 const reportList = document.getElementById("report-list");
+const adSlots = Array.from(document.querySelectorAll("[data-ad-slot-key]"));
 const tabButtons = Array.from(document.querySelectorAll(".viz-tab"));
 const tabPanels = Array.from(document.querySelectorAll(".viz-panel"));
 const dotCount = 192;
@@ -193,6 +194,7 @@ let compareMode = "all";
 let activeFlowStep = "age";
 let activeTab = "dot";
 let renderTimer = null;
+let adsInitialized = false;
 
 const getBirthdayDate = () => {
   if (!birthMonthInput.value || !birthDayInput.value) return null;
@@ -238,6 +240,57 @@ const getCurrentAgeValue = () => {
 
 const updateDerivedAge = () => {
   derivedAgeInput.value = `${getCurrentAgeValue()}歳`;
+};
+
+const adsConfig = window.LIFE_RATIO_ADS ?? {};
+
+const initializeAds = () => {
+  if (adsInitialized) return;
+
+  const client = typeof adsConfig.adsenseClient === "string" ? adsConfig.adsenseClient.trim() : "";
+  const slots = adsConfig.slots ?? {};
+  if (!client || !client.startsWith("ca-pub-")) return;
+
+  const availableSlots = adSlots.filter((slot) => {
+    const slotId = typeof slots[slot.dataset.adSlotKey] === "string" ? slots[slot.dataset.adSlotKey].trim() : "";
+    return slotId;
+  });
+
+  if (!availableSlots.length) return;
+
+  adsInitialized = true;
+
+  const renderAds = () => {
+    availableSlots.forEach((slot) => {
+      if (slot.dataset.ready === "true") return;
+      const slotId = slots[slot.dataset.adSlotKey].trim();
+      const ad = document.createElement("ins");
+      ad.className = "adsbygoogle";
+      ad.style.display = "block";
+      ad.dataset.adClient = client;
+      ad.dataset.adSlot = slotId;
+      ad.dataset.adFormat = "auto";
+      ad.dataset.fullWidthResponsive = "true";
+      slot.append(ad);
+      slot.classList.remove("is-hidden");
+      slot.dataset.ready = "true";
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    });
+  };
+
+  const existingScript = document.querySelector('script[data-adsense-loader="true"]');
+  if (existingScript) {
+    renderAds();
+    return;
+  }
+
+  const script = document.createElement("script");
+  script.async = true;
+  script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${encodeURIComponent(client)}`;
+  script.crossOrigin = "anonymous";
+  script.dataset.adsenseLoader = "true";
+  script.addEventListener("load", renderAds, { once: true });
+  document.head.append(script);
 };
 
 const lifetimeAssetYen = 100_000_000;
@@ -986,6 +1039,7 @@ setCompareMode("focused");
 setFlowStep("age");
 birthYearInput.max = String(new Date().getFullYear());
 render();
+initializeAds();
 
 if (renderTimer) clearInterval(renderTimer);
 renderTimer = setInterval(() => {

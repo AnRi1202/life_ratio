@@ -38,3 +38,15 @@ After that, GitHub Pages will publish the static files in this directory.
 - `index.html`: layout and form structure
 - `styles.css`: visual design and chart styling
 - `script.js`: calculation and rendering logic
+- `ads-config.js`: local AdSense client and slot configuration
+
+## AdSense
+
+AdSense is scaffolded but disabled by default.
+
+1. Open `ads-config.js`
+2. Set `adsenseClient` to your AdSense publisher id like `ca-pub-xxxxxxxxxxxxxxxx`
+3. Set each slot id in `slots.hero` and `slots.results`
+4. Redeploy
+
+If `adsenseClient` or the slot ids are empty, no ad block is shown.

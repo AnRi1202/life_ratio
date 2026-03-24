@@ -249,6 +249,24 @@ h3 {
   font-size: 0.96rem;
 }
 
+.ad-slot {
+  margin: 18px 0 0;
+  padding: 12px;
+  border: 1px solid rgba(99, 115, 130, 0.12);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.66);
+  text-align: center;
+}
+
+.ad-slot.is-hidden {
+  display: none;
+}
+
+.ad-slot ins {
+  display: block;
+  min-height: 90px;
+}
+
 .stage-pill {
   padding: 12px 16px;
   border: 1px solid var(--line);
