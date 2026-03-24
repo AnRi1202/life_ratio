@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>life ratio</title>
+    <meta
+      name="description"
+      content="A static site that visualizes how your lifetime has been spent through charts and reports."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Noto+Sans+JP:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="lang-switch" aria-label="language switch">
+          <a class="lang-link" href="./index.html">JP</a>
+          <a class="lang-link is-active" href="./en.html">EN</a>
+        </div>
+        <div class="hero-layout">
+          <div class="hero-copy">
+            <p class="eyebrow">life ratio</p>
+            <h1>Make the shape of your time visible.</h1>
+            <p class="lead">
+              Enter your drift time, daily tasks, and effort time to visualize how your life has been spent so far.
+            </p>
+            <p class="lead">
+              There is no universal answer for what counts as wasted time. What matters, what feels worth keeping, and what you want less of all differ from person to person. life ratio is not for blaming your past. It is for making the shape of the life you want easier to see.
+            </p>
+          </div>
+
+          <aside class="hero-figure" aria-hidden="true">
+            <svg viewBox="0 0 320 320" class="hourglass-illustration">
+              <defs>
+                <linearGradient id="glassGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#355070" />
+                  <stop offset="50%" stop-color="#4f6d8a" />
+                  <stop offset="100%" stop-color="#7c90a8" />
+                </linearGradient>
+                <linearGradient id="sandGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#d08c60" />
+                  <stop offset="100%" stop-color="#a44a3f" />
+                </linearGradient>
+              </defs>
+
+              <circle cx="160" cy="160" r="136" fill="rgba(255,255,255,0.72)" />
+              <circle cx="86" cy="88" r="18" fill="#d08c60" opacity="0.88" />
+              <circle cx="238" cy="84" r="14" fill="#355070" opacity="0.88" />
+              <circle cx="250" cy="228" r="18" fill="#7c90a8" opacity="0.88" />
+              <circle cx="82" cy="236" r="12" fill="#a44a3f" opacity="0.88" />
+
+              <rect x="112" y="42" width="96" height="16" rx="8" fill="#2f4558" />
+              <rect x="112" y="262" width="96" height="16" rx="8" fill="#2f4558" />
+
+              <path
+                d="M124 58 C128 116, 148 132, 160 144 C172 132, 192 116, 196 58"
+                fill="none"
+                stroke="url(#glassGlow)"
+                stroke-width="12"
+                stroke-linecap="round"
+              />
+              <path
+                d="M124 262 C128 204, 148 188, 160 176 C172 188, 192 204, 196 262"
+                fill="none"
+                stroke="url(#glassGlow)"
+                stroke-width="12"
+                stroke-linecap="round"
+              />
+
+              <path d="M134 72 H186 C182 104, 170 122, 160 132 C150 122, 138 104, 134 72 Z" fill="rgba(255,255,255,0.82)" />
+              <path d="M140 84 H180 C176 104, 167 116, 160 122 C153 116, 144 104, 140 84 Z" fill="url(#sandGlow)" />
+
+              <path d="M134 248 H186 C182 216, 170 198, 160 188 C150 198, 138 216, 134 248 Z" fill="rgba(255,255,255,0.82)" />
+              <path d="M140 234 H180 C176 220, 168 208, 160 201 C152 208, 144 220, 140 234 Z" fill="url(#sandGlow)" />
+
+              <rect x="156" y="132" width="8" height="58" rx="4" fill="url(#sandGlow)" />
+
+              <circle cx="145" cy="220" r="4" fill="#d08c60" />
+              <circle cx="174" cy="228" r="5" fill="#a44a3f" />
+              <circle cx="160" cy="236" r="4" fill="#d08c60" />
+            </svg>
+          </aside>
+        </div>
+        <div class="hero-stats">
+          <div>
+            <span>Drift</span>
+            <strong>Time that slipped away</strong>
+          </div>
+          <div>
+            <span>Routine</span>
+            <strong>Time that keeps daily life running</strong>
+          </div>
+          <div>
+            <span>Effort</span>
+            <strong>Time you intentionally built</strong>
+          </div>
+        </div>
+      </header>
+
+      <main class="app-shell" data-stage="input">
+        <div class="stage-switcher" role="tablist" aria-label="flow stages">
+          <button class="stage-pill active" type="button" data-stage-target="input">1. Input</button>
+          <button class="stage-pill" type="button" data-stage-target="results">2. Results</button>
+          <button class="stage-pill" type="button" data-stage-target="tweak">3. Adjust While Viewing</button>
+        </div>
+
+        <div class="app-grid">
+        <section class="panel input-panel">
+          <div class="section-heading">
+            <p class="eyebrow">Input</p>
+            <h2>Enter your time history</h2>
+          </div>
+
+          <section class="flow-step is-active" data-flow-step="age">
+            <div class="step-head">
+              <p class="eyebrow">Step 1</p>
+              <h3>Start with your birth year</h3>
+            </div>
+            <div class="age-step-grid">
+              <label class="field age-field age-field-primary">
+                <span>Birth year</span>
+                <input id="birth-year" type="number" min="1900" max="2026" value="2000" />
+              </label>
+              <label class="field age-field">
+                <span>Birthday (optional)</span>
+                <div class="birthday-inputs">
+                  <input id="birth-month" type="text" inputmode="numeric" placeholder="MM" aria-label="Birth month" />
+                  <span>/</span>
+                  <input id="birth-day" type="text" inputmode="numeric" placeholder="DD" aria-label="Birth day" />
+                </div>
+                <small class="field-hint">Use numbers only</small>
+              </label>
+              <label class="field age-field age-field-derived">
+                <span>Current age</span>
+                <input id="derived-age" type="text" value="25" readonly />
+              </label>
+            </div>
+            <div class="step-actions">
+              <button class="button" type="button" data-next-step="waste">Continue</button>
+            </div>
+          </section>
+
+          <section class="group-block flow-step" data-flow-step="waste">
+            <div class="group-head">
+              <div>
+                <p class="eyebrow">Step 2</p>
+                <h3>Time you tend to lose</h3>
+              </div>
+            </div>
+
+            <p class="helper-copy">
+              What feels wasteful is different for everyone. Instead of using a general rule, enter the time you personally want less of. This can include not only entertainment, but also things like draining social plans, overthinking, and procrastination. The suggestions are grouped by type to make them easier to scan.
+            </p>
+
+            <div id="waste-list" class="entry-list"></div>
+
+            <div class="step-actions">
+              <div class="quick-add">
+                <select id="waste-preset">
+                  <option value="">Choose a suggestion</option>
+                  <optgroup label="Social and video">
+                    <option value="YouTube">YouTube</option>
+                    <option value="TikTok">TikTok</option>
+                    <option value="Instagram">Instagram</option>
+                    <option value="X">X</option>
+                    <option value="Netflix">Netflix</option>
+                    <option value="Twitch">Twitch</option>
+                    <option value="Watching streams">Watching streams</option>
+                    <option value="Clips binge">Clips binge</option>
+                    <option value="Comment rabbit holes">Comment rabbit holes</option>
+                    <option value="Drama watching">Drama watching</option>
+                    <option value="Gossip browsing">Gossip browsing</option>
+                  </optgroup>
+                  <optgroup label="Aimless web">
+                    <option value="Aimless browsing">Aimless browsing</option>
+                    <option value="Phone scrolling">Phone scrolling</option>
+                    <option value="Purpose-free searching">Purpose-free searching</option>
+                    <option value="Aggregator loops">Aggregator loops</option>
+                    <option value="News app looping">News app looping</option>
+                    <option value="Review rabbit holes">Review rabbit holes</option>
+                    <option value="Online store loops">Online store loops</option>
+                    <option value="Sale browsing">Sale browsing</option>
+                    <option value="Marketplace browsing">Marketplace browsing</option>
+                  </optgroup>
+                  <optgroup label="Gaming">
+                    <option value="Mobile gacha games">Mobile gacha games</option>
+                    <option value="Console gaming">Console gaming</option>
+                    <option value="PC gaming">PC gaming</option>
+                    <option value="Rank grinding">Rank grinding</option>
+                    <option value="Daily mission grind">Daily mission grind</option>
+                    <option value="Idle games">Idle games</option>
+                    <option value="Guide browsing">Guide browsing</option>
+                    <option value="Build tinkering">Build tinkering</option>
+                    <option value="Gacha animation watching">Gacha animation watching</option>
+                  </optgroup>
+                  <optgroup label="Escape and dependency">
+                    <option value="Porn">Porn</option>
+                    <option value="Gambling">Gambling</option>
+                    <option value="Pachinko/slots">Pachinko/slots</option>
+                    <option value="Racing bets">Racing bets</option>
+                    <option value="Gacha spending loops">Gacha spending loops</option>
+                    <option value="Staying up late">Staying up late</option>
+                    <option value="Going back to sleep">Going back to sleep</option>
+                    <option value="Oversleeping">Oversleeping</option>
+                    <option value="Phone in bed">Phone in bed</option>
+                  </optgroup>
+                  <optgroup label="People and conversation">
+                    <option value="Aimless calls">Aimless calls</option>
+                    <option value="Aimless texting">Aimless texting</option>
+                    <option value="Checking pointless DMs">Checking pointless DMs</option>
+                    <option value="Gossip talk">Gossip talk</option>
+                    <option value="Meaningless meetings">Meaningless meetings</option>
+                    <option value="Showing up just because">Showing up just because</option>
+                    <option value="Draining social drinks">Draining social drinks</option>
+                  </optgroup>
+                  <optgroup label="Daily friction">
+                    <option value="Commute">Commute</option>
+                    <option value="Waiting time">Waiting time</option>
+                    <option value="Lines and queues">Lines and queues</option>
+                    <option value="Transfer waiting">Transfer waiting</option>
+                    <option value="Getting ready">Getting ready</option>
+                    <option value="Cleaning">Cleaning</option>
+                    <option value="Laundry">Laundry</option>
+                    <option value="Cooking">Cooking</option>
+                    <option value="Tidying up">Tidying up</option>
+                  </optgroup>
+                  <optgroup label="Procrastination and anxiety">
+                    <option value="Procrastination">Procrastination</option>
+                    <option value="Waiting to feel motivated">Waiting to feel motivated</option>
+                    <option value="Only organizing tasks">Only organizing tasks</option>
+                    <option value="Notion tinkering">Notion tinkering</option>
+                    <option value="Over-researching">Over-researching</option>
+                    <option value="Perfectionism paralysis">Perfectionism paralysis</option>
+                    <option value="Frozen by future anxiety">Frozen by future anxiety</option>
+                    <option value="Overthinking">Overthinking</option>
+                  </optgroup>
+                </select>
+                <button class="button button-secondary" id="add-waste-preset" type="button">Add suggestion</button>
+              </div>
+              <button class="button button-secondary" id="add-waste" type="button">Add item</button>
+              <button class="button" type="button" data-next-step="habit">Next</button>
+            </div>
+          </section>
+
+          <section class="group-block flow-step" data-flow-step="habit">
+            <div class="group-head">
+              <div>
+                <p class="eyebrow">Step 3</p>
+                <h3>Daily tasks</h3>
+              </div>
+            </div>
+
+            <p class="helper-copy">
+              This section is not the main character. It is the baseline that helps place everything else in context. By entering things like sleep and meals, you can see how heavy your drift time and effort time really are inside your full life.
+            </p>
+
+            <div id="habit-list" class="entry-list"></div>
+
+            <div class="step-actions">
+              <div class="quick-add">
+                <select id="habit-preset">
+                  <option value="">Choose a suggestion</option>
+                  <option value="sleep">Sleep</option>
+                  <option value="meals">Meals</option>
+                  <option value="grooming">Getting ready</option>
+                  <option value="commute">Commute</option>
+                  <option value="housework">Housework</option>
+                </select>
+                <button class="button button-secondary" id="add-habit-preset" type="button">Add suggestion</button>
+              </div>
+              <button class="button button-secondary" id="add-habit" type="button">Add item</button>
+              <button class="button" type="button" data-next-step="effort">Next</button>
+            </div>
+          </section>
+
+          <section class="group-block flow-step" data-flow-step="effort">
+            <div class="group-head">
+              <div>
+                <p class="eyebrow">Step 4</p>
+                <h3>Effort time</h3>
+              </div>
+            </div>
+
+            <p class="helper-copy">
+              Enter the time that feels genuinely built when you look back on it. Study, training, reading, making, qualification prep, research. This is the time you want to leave to your future self.
+            </p>
+
+            <div id="effort-list" class="entry-list"></div>
+
+            <div class="step-actions">
+              <div class="quick-add">
+                <select id="effort-preset">
+                  <option value="">Choose a suggestion</option>
+                  <option value="study">Study</option>
+                  <option value="workout">Workout</option>
+                  <option value="reading">Reading</option>
+                  <option value="building">Making things</option>
+                  <option value="research">Research</option>
+                </select>
+                <button class="button button-secondary" id="add-effort-preset" type="button">Add suggestion</button>
+              </div>
+              <button class="button button-secondary" id="add-effort" type="button">Add item</button>
+            </div>
+          </section>
+
+          <div class="panel-actions">
+            <button class="button" id="to-results" type="button">View results</button>
+          </div>
+        </section>
+
+        <section class="panel output-panel">
+          <div class="section-heading">
+            <p class="eyebrow">Results</p>
+            <h2>Your life ratio</h2>
+            <p id="summary-copy">
+              Your entered data is being grouped to show how your time adds up across categories.
+            </p>
+          </div>
+
+          <div class="summary-grid">
+            <div class="summary-card">
+              <span>Total lifetime</span>
+              <strong id="total-hours">0 hours</strong>
+            </div>
+            <div class="summary-card">
+              <span>Tracked share</span>
+              <strong id="largest-category">-</strong>
+            </div>
+          </div>
+
+        <div class="viz-tabs" role="tablist" aria-label="visualization tabs">
+            <button class="viz-tab active" type="button" role="tab" aria-selected="true" data-tab="dot">
+              <span class="viz-icon">▦</span>
+              <span>Erosion Map</span>
+            </button>
+            <button class="viz-tab" type="button" role="tab" aria-selected="false" data-tab="pie">
+              <span class="viz-icon">◔</span>
+              <span>Overall Share</span>
+            </button>
+            <button class="viz-tab" type="button" role="tab" aria-selected="false" data-tab="bar">
+              <span class="viz-icon">▤</span>
+              <span>Item Comparison</span>
+            </button>
+            <button class="viz-tab" type="button" role="tab" aria-selected="false" data-tab="report">
+              <span class="viz-icon">✦</span>
+              <span>In Words</span>
+            </button>
+          </div>
+
+          <div class="viz-panels">
+            <section class="chart-card viz-panel active" data-panel="dot">
+              <div class="chart-head">
+                <p class="eyebrow">Erosion View</p>
+              </div>
+              <div class="sub-toggle" role="tablist" aria-label="erosion modes">
+                <button class="sub-toggle-button active" type="button" data-dot-mode="all">With routine</button>
+                <button class="sub-toggle-button" type="button" data-dot-mode="focused">Without routine</button>
+              </div>
+              <div class="erosion-wrap">
+                <div id="pie-chart" class="pie-chart" aria-hidden="true"></div>
+                <div id="dot-tooltip" class="dot-tooltip" hidden>
+                  <strong id="dot-tooltip-title"></strong>
+                  <span id="dot-tooltip-copy"></span>
+                </div>
+              </div>
+            </section>
+
+            <section class="chart-card viz-panel" data-panel="pie">
+              <div class="chart-head">
+                <p class="eyebrow">Ratio View</p>
+                <strong>How much each category takes up in your life</strong>
+              </div>
+              <div class="sub-toggle" role="tablist" aria-label="compare modes pie">
+                <button class="sub-toggle-button compare-toggle active" type="button" data-compare-mode="all">With routine</button>
+                <button class="sub-toggle-button compare-toggle" type="button" data-compare-mode="focused">Without routine</button>
+              </div>
+              <div class="classic-pie-wrap">
+                <div class="classic-pie-shell">
+                  <div id="classic-pie" class="classic-pie" aria-hidden="true"></div>
+                  <svg id="pie-hit-area" class="pie-hit-area" viewBox="0 0 100 100" aria-hidden="true"></svg>
+                  <div id="pie-tooltip" class="pie-tooltip" hidden>
+                    <strong id="pie-tooltip-title"></strong>
+                    <span id="pie-tooltip-copy"></span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="chart-card viz-panel" data-panel="bar">
+              <div class="chart-head">
+                <p class="eyebrow">Compare View</p>
+                <strong>How large each item is</strong>
+              </div>
+              <div class="sub-toggle" role="tablist" aria-label="compare modes bar">
+                <button class="sub-toggle-button compare-toggle active" type="button" data-compare-mode="all">With routine</button>
+                <button class="sub-toggle-button compare-toggle" type="button" data-compare-mode="focused">Without routine</button>
+              </div>
+              <div id="bar-chart" class="bar-chart"></div>
+            </section>
+
+            <section class="chart-card viz-panel report-card" data-panel="report">
+              <div class="chart-head">
+                <p class="eyebrow">Narrative View</p>
+                <strong>Read drift and effort in words</strong>
+              </div>
+              <div id="report-list" class="report-list"></div>
+            </section>
+          </div>
+
+          <section class="chart-card legend-card">
+            <div class="chart-head">
+              <p class="eyebrow">Legend</p>
+              <strong>Category breakdown</strong>
+            </div>
+            <div id="legend" class="legend"></div>
+          </section>
+
+          <div class="panel-actions output-actions">
+            <button class="button button-secondary" id="back-to-input" type="button">Back to input</button>
+            <button class="button" id="to-tweak" type="button">Adjust while viewing</button>
+          </div>
+        </section>
+        </div>
+      </main>
+    </div>
+
+    <template id="waste-template">
+      <article class="entry-card">
+        <div class="entry-top">
+          <label class="field">
+            <span>Item name</span>
+            <input data-name type="text" placeholder="YouTube" list="waste-suggestions" />
+          </label>
+          <button class="icon-button" data-remove type="button" aria-label="Remove item">×</button>
+        </div>
+
+        <div class="entry-grid">
+          <label class="field">
+            <span>From what age?</span>
+            <input data-start-age type="number" min="0" max="120" value="18" />
+          </label>
+          <label class="field">
+            <span>Until what age? (optional)</span>
+            <input data-end-age type="number" min="0" max="120" placeholder="Until now" />
+          </label>
+          <label class="field">
+            <span>Frequency / week</span>
+            <input data-frequency type="number" min="0" step="0.1" value="7" />
+          </label>
+          <label class="field">
+            <span>Minutes per session</span>
+            <input data-duration type="number" min="0" step="1" value="60" />
+          </label>
+        </div>
+      </article>
+    </template>
+
+    <template id="habit-template">
+      <article class="entry-card">
+        <div class="entry-top">
+          <label class="field">
+            <span>Item name</span>
+            <input data-name type="text" placeholder="Sleep" />
+          </label>
+          <button class="icon-button" data-remove type="button" aria-label="Remove item">×</button>
+        </div>
+
+        <div class="entry-grid">
+          <label class="field">
+            <span>From what age?</span>
+            <input data-start-age type="number" min="0" max="120" value="0" />
+          </label>
+          <label class="field">
+            <span>Until what age? (optional)</span>
+            <input data-end-age type="number" min="0" max="120" placeholder="Until now" />
+          </label>
+          <label class="field">
+            <span>Hours per day</span>
+            <input data-hours-per-day type="number" min="0" step="0.1" value="8" />
+          </label>
+          <label class="field">
+            <span>Note</span>
+            <input data-note type="text" placeholder="Roughly every day" />
+          </label>
+        </div>
+      </article>
+    </template>
+
+    <template id="effort-template">
+      <article class="entry-card">
+        <div class="entry-top">
+          <label class="field">
+            <span>Item name</span>
+            <input data-name type="text" placeholder="Study" />
+          </label>
+          <button class="icon-button" data-remove type="button" aria-label="Remove item">×</button>
+        </div>
+
+        <div class="entry-grid">
+          <label class="field">
+            <span>From what age?</span>
+            <input data-start-age type="number" min="0" max="120" value="15" />
+          </label>
+          <label class="field">
+            <span>Until what age? (optional)</span>
+            <input data-end-age type="number" min="0" max="120" placeholder="Until now" />
+          </label>
+          <label class="field">
+            <span>Frequency / week</span>
+            <input data-frequency type="number" min="0" step="0.1" value="5" />
+          </label>
+          <label class="field">
+            <span>Minutes per session</span>
+            <input data-duration type="number" min="0" step="1" value="90" />
+          </label>
+        </div>
+      </article>
+    </template>
+
+    <datalist id="waste-suggestions">
+      <option value="YouTube"></option>
+      <option value="TikTok"></option>
+      <option value="Instagram"></option>
+      <option value="X"></option>
+      <option value="Netflix"></option>
+      <option value="Twitch"></option>
+      <option value="Watching streams"></option>
+      <option value="Clips binge"></option>
+      <option value="Comment rabbit holes"></option>
+      <option value="Drama watching"></option>
+      <option value="Gossip browsing"></option>
+      <option value="Aimless browsing"></option>
+      <option value="Phone scrolling"></option>
+      <option value="Purpose-free searching"></option>
+      <option value="Aggregator loops"></option>
+      <option value="News app looping"></option>
+      <option value="Review rabbit holes"></option>
+      <option value="Online store loops"></option>
+      <option value="Sale browsing"></option>
+      <option value="Marketplace browsing"></option>
+      <option value="Mobile gacha games"></option>
+      <option value="Console gaming"></option>
+      <option value="PC gaming"></option>
+      <option value="Rank grinding"></option>
+      <option value="Daily mission grind"></option>
+      <option value="Idle games"></option>
+      <option value="Guide browsing"></option>
+      <option value="Build tinkering"></option>
+      <option value="Gacha animation watching"></option>
+      <option value="Porn"></option>
+      <option value="Gambling"></option>
+      <option value="Pachinko/slots"></option>
+      <option value="Racing bets"></option>
+      <option value="Gacha spending loops"></option>
+      <option value="Staying up late"></option>
+      <option value="Going back to sleep"></option>
+      <option value="Oversleeping"></option>
+      <option value="Phone in bed"></option>
+      <option value="Aimless calls"></option>
+      <option value="Aimless texting"></option>
+      <option value="Checking pointless DMs"></option>
+      <option value="Gossip talk"></option>
+      <option value="Meaningless meetings"></option>
+      <option value="Showing up just because"></option>
+      <option value="Draining social drinks"></option>
+      <option value="Commute"></option>
+      <option value="Waiting time"></option>
+      <option value="Lines and queues"></option>
+      <option value="Transfer waiting"></option>
+      <option value="Getting ready"></option>
+      <option value="Cleaning"></option>
+      <option value="Laundry"></option>
+      <option value="Cooking"></option>
+      <option value="Tidying up"></option>
+      <option value="Procrastination"></option>
+      <option value="Waiting to feel motivated"></option>
+      <option value="Only organizing tasks"></option>
+      <option value="Notion tinkering"></option>
+      <option value="Over-researching"></option>
+      <option value="Perfectionism paralysis"></option>
+      <option value="Frozen by future anxiety"></option>
+      <option value="Overthinking"></option>
+    </datalist>
+
+    <script src="./script.js"></script>
+  </body>
+</html>

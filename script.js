@@ -1,14 +1,157 @@
+const locale = document.documentElement.lang.startsWith("en") ? "en" : "ja";
+
+const copy = {
+  ja: {
+    typeLabels: {
+      waste: "無駄な時間",
+      habit: "日々のタスク",
+      effort: "頑張った時間",
+      untracked: "未入力",
+    },
+    hoursUnit: "時間",
+    zeroHours: "0時間",
+    minutesUnit: "分",
+    secondsUnit: "秒",
+    yearsUnit: "年",
+    tracked: "tracked",
+    untrackedName: "未入力",
+    untrackedDetail: "入力していない時間",
+    emptySummary: "入力したデータをもとに、人生全体の時間に対する割合を集計しています。",
+    compareLabelAll: "人生全体",
+    compareLabelFocused: "日常を除いた全体",
+    summarySentence: (largestName, compareLabel, typeLabel) =>
+      `${largestName} が最も大きく、${compareLabel}に対して見ると存在感が大きい項目です。${typeLabel} は同系色でまとめています。`,
+    newWaste: "新しい項目",
+    newHabit: "新しい習慣",
+    newEffort: "新しい努力",
+    reportTopWasteTitle: (hours, name) => `${hours} を ${name} に使っている`,
+    reportTopWasteBody: (months) => `約 ${months} か月に相当します。`,
+    reportTopEffortTitle: (hours, name) => `${hours} を ${name} に積み上げている`,
+    reportTopEffortBody: "かなり長い時間に相当します。",
+    reportWasteTotalTitle: (hours) => `無駄時間の合計は ${hours}`,
+    reportEffortTotalTitle: (hours) => `頑張った時間の合計は ${hours}`,
+    reportAssetBody: (yen) =>
+      `今までの人生の時間から日常を除いて ${yen} とすると、これは ${yen} に相当します。`,
+    reportAssetWasteBody: (totalAsset, asset) =>
+      `今までの人生の時間から日常を除いて ${totalAsset} とすると、これは ${asset} に相当します。`,
+    reportAssetEffortBody: (totalAsset, asset) =>
+      `今までの人生の時間から日常を除いて ${totalAsset} とすると、これは ${asset} に相当します。`,
+    reportEmptyTitle: (years, hours) => `${years}年間は約${hours}`,
+    reportEmptyBody: "無駄な時間か頑張った時間を入力すると、ここにレポートを出します。",
+    pieTooltip: (typeLabel, hours, percent) => `${typeLabel} / ${hours}h / ${percent}%`,
+    legendDetail: (typeLabel, detail) => `${typeLabel}`,
+    defaultWaste: [
+      { name: "YouTube", startAge: 15, frequency: 14, duration: 35 },
+      { name: "TikTok", startAge: 20, frequency: 10, duration: 18 },
+      { name: "Instagram", startAge: 16, frequency: 18, duration: 12 },
+      { name: "X", startAge: 17, frequency: 25, duration: 8 },
+      { name: "ネットサーフィン", startAge: 15, frequency: 7, duration: 25 },
+      { name: "なんとなくスマホ", startAge: 18, frequency: 14, duration: 10 },
+      { name: "先延ばし", startAge: 16, frequency: 7, duration: 20 },
+    ],
+    defaultHabit: [
+      { name: "睡眠", startAge: 0, hoursPerDay: 8, note: "毎日" },
+      { name: "食事", startAge: 0, hoursPerDay: 1.5, note: "朝昼夜の合計" },
+      { name: "身支度", startAge: 0, hoursPerDay: 0.7, note: "風呂や準備" },
+    ],
+    defaultEffort: [
+      { name: "勉強", startAge: 15, frequency: 5, duration: 90 },
+      { name: "筋トレ", startAge: 18, frequency: 3, duration: 75 },
+    ],
+    habitPresets: {
+      sleep: { name: "睡眠", startAge: 0, hoursPerDay: 8, note: "毎日" },
+      meals: { name: "食事", startAge: 0, hoursPerDay: 1.5, note: "朝昼夜の合計" },
+      grooming: { name: "身支度", startAge: 0, hoursPerDay: 0.7, note: "風呂や準備" },
+      commute: { name: "通学・通勤", startAge: 15, hoursPerDay: 1, note: "" },
+      housework: { name: "家事", startAge: 18, hoursPerDay: 0.8, note: "" },
+    },
+    effortPresets: {
+      study: { name: "勉強", startAge: 15, frequency: 5, duration: 90 },
+      workout: { name: "筋トレ", startAge: 18, frequency: 3, duration: 75 },
+      reading: { name: "読書", startAge: 15, frequency: 4, duration: 45 },
+      building: { name: "制作", startAge: 16, frequency: 4, duration: 120 },
+      research: { name: "研究", startAge: 20, frequency: 5, duration: 120 },
+    },
+  },
+  en: {
+    typeLabels: {
+      waste: "Drift Time",
+      habit: "Daily Tasks",
+      effort: "Effort Time",
+      untracked: "Untracked",
+    },
+    hoursUnit: " hours",
+    zeroHours: "0 hours",
+    minutesUnit: "m",
+    secondsUnit: "s",
+    yearsUnit: " years",
+    tracked: "tracked",
+    untrackedName: "Untracked",
+    untrackedDetail: "Time not entered yet",
+    emptySummary: "This view summarizes how your entered time sits inside your total lifetime.",
+    compareLabelAll: "your whole lifetime",
+    compareLabelFocused: "your life excluding routine time",
+    summarySentence: (largestName, compareLabel, typeLabel) =>
+      `${largestName} stands out the most when viewed against ${compareLabel}. ${typeLabel} uses one color family.`,
+    newWaste: "New item",
+    newHabit: "New routine",
+    newEffort: "New effort",
+    reportTopWasteTitle: (hours, name) => `${hours} spent on ${name}`,
+    reportTopWasteBody: (months) => `That is roughly ${months} months.`,
+    reportTopEffortTitle: (hours, name) => `${hours} invested in ${name}`,
+    reportTopEffortBody: "That already adds up to a substantial amount of time.",
+    reportWasteTotalTitle: (hours) => `Total drift time: ${hours}`,
+    reportEffortTotalTitle: (hours) => `Total effort time: ${hours}`,
+    reportAssetWasteBody: (totalAsset, asset) =>
+      `If the time in your life so far, excluding routine time, were worth ${totalAsset}, this would equal about ${asset}.`,
+    reportAssetEffortBody: (totalAsset, asset) =>
+      `If the time in your life so far, excluding routine time, were worth ${totalAsset}, this would equal about ${asset}.`,
+    reportEmptyTitle: (years, hours) => `${years} years is about ${hours}`,
+    reportEmptyBody: "Add drift time or effort time and your written report will appear here.",
+    pieTooltip: (typeLabel, hours, percent) => `${typeLabel} / ${hours}h / ${percent}%`,
+    defaultWaste: [
+      { name: "YouTube", startAge: 15, frequency: 14, duration: 35 },
+      { name: "TikTok", startAge: 20, frequency: 10, duration: 18 },
+      { name: "Instagram", startAge: 16, frequency: 18, duration: 12 },
+      { name: "X", startAge: 17, frequency: 25, duration: 8 },
+      { name: "Aimless browsing", startAge: 15, frequency: 7, duration: 25 },
+      { name: "Phone scrolling", startAge: 18, frequency: 14, duration: 10 },
+      { name: "Procrastination", startAge: 16, frequency: 7, duration: 20 },
+    ],
+    defaultHabit: [
+      { name: "Sleep", startAge: 0, hoursPerDay: 8, note: "Every day" },
+      { name: "Meals", startAge: 0, hoursPerDay: 1.5, note: "Breakfast, lunch, dinner" },
+      { name: "Getting ready", startAge: 0, hoursPerDay: 0.7, note: "Shower and prep" },
+    ],
+    defaultEffort: [
+      { name: "Study", startAge: 15, frequency: 5, duration: 90 },
+      { name: "Workout", startAge: 18, frequency: 3, duration: 75 },
+    ],
+    habitPresets: {
+      sleep: { name: "Sleep", startAge: 0, hoursPerDay: 8, note: "Every day" },
+      meals: { name: "Meals", startAge: 0, hoursPerDay: 1.5, note: "Breakfast, lunch, dinner" },
+      grooming: { name: "Getting ready", startAge: 0, hoursPerDay: 0.7, note: "Shower and prep" },
+      commute: { name: "Commute", startAge: 15, hoursPerDay: 1, note: "" },
+      housework: { name: "Housework", startAge: 18, hoursPerDay: 0.8, note: "" },
+    },
+    effortPresets: {
+      study: { name: "Study", startAge: 15, frequency: 5, duration: 90 },
+      workout: { name: "Workout", startAge: 18, frequency: 3, duration: 75 },
+      reading: { name: "Reading", startAge: 15, frequency: 4, duration: 45 },
+      building: { name: "Making things", startAge: 16, frequency: 4, duration: 120 },
+      research: { name: "Research", startAge: 20, frequency: 5, duration: 120 },
+    },
+  },
+};
+
+const t = copy[locale];
+
 const typePalettes = {
   waste: ["#991b1b", "#b91c1c", "#c2410c", "#7f1d1d", "#9a3412"],
   habit: ["#d4a017", "#e0b43d", "#c78f12", "#b9860b", "#e7c35f"],
   effort: ["#15803d", "#0f766e", "#16a34a", "#22c55e", "#2f9d74"],
 };
-const typeLabels = {
-  waste: "無駄な時間",
-  habit: "日々のタスク",
-  effort: "頑張った時間",
-  untracked: "未入力",
-};
+const typeLabels = t.typeLabels;
 
 const birthYearInput = document.getElementById("birth-year");
 const birthMonthInput = document.getElementById("birth-month");
@@ -109,33 +252,9 @@ const updateDerivedAge = () => {
   derivedAgeInput.value = `${getCurrentAgeValue()}歳`;
 };
 
-const equivalences = [
-  { label: "8時間睡眠", hours: 8 },
-  { label: "大学の講義90分", hours: 1.5 },
-  { label: "フルタイム勤務1日", hours: 8 },
-  { label: "東京-大阪の往復新幹線", hours: 6 },
-  { label: "映画1本", hours: 2 },
-  { label: "1週間", hours: 24 * 7 },
-  { label: "1か月", hours: 24 * 30 },
-];
-
 const lifetimeAssetYen = 100_000_000;
-
-const habitPresets = {
-  sleep: { name: "睡眠", startAge: 0, hoursPerDay: 8, note: "毎日" },
-  meals: { name: "食事", startAge: 0, hoursPerDay: 1.5, note: "朝昼夜の合計" },
-  grooming: { name: "身支度", startAge: 0, hoursPerDay: 0.7, note: "風呂や準備" },
-  commute: { name: "通学・通勤", startAge: 15, hoursPerDay: 1, note: "" },
-  housework: { name: "家事", startAge: 18, hoursPerDay: 0.8, note: "" },
-};
-
-const effortPresets = {
-  study: { name: "勉強", startAge: 15, frequency: 5, duration: 90 },
-  workout: { name: "筋トレ", startAge: 18, frequency: 3, duration: 75 },
-  reading: { name: "読書", startAge: 15, frequency: 4, duration: 45 },
-  building: { name: "制作", startAge: 16, frequency: 4, duration: 120 },
-  research: { name: "研究", startAge: 20, frequency: 5, duration: 120 },
-};
+const habitPresets = t.habitPresets;
+const effortPresets = t.effortPresets;
 
 const ensureDots = () => {
   if (pieChart.childElementCount === dotCount) return;
@@ -153,8 +272,8 @@ const hideDotTooltip = () => {
 };
 
 const showDotTooltip = (event, dot) => {
-  const name = dot.dataset.name || "未入力";
-  const detail = dot.dataset.detail || "";
+  const name = dot.dataset.name || t.untrackedName;
+  const detail = dot.dataset.detail || t.untrackedDetail;
   dotTooltipTitle.textContent = name;
   dotTooltipCopy.textContent = detail;
   dotTooltip.hidden = false;
@@ -303,8 +422,8 @@ const animateDots = (items, total) => {
   dots.forEach((dot) => {
     if (!dot.dataset.type) {
       dot.dataset.type = "untracked";
-      dot.dataset.name = "未入力";
-      dot.dataset.detail = "入力していない時間";
+      dot.dataset.name = t.untrackedName;
+      dot.dataset.detail = t.untrackedDetail;
     }
   });
 
@@ -336,8 +455,13 @@ const animateDots = (items, total) => {
   });
 };
 
-const formatHoursLabel = (hours) => `${Math.round(hours).toLocaleString("ja-JP")}時間`;
+const formatHoursLabel = (hours) => `${Math.round(hours).toLocaleString("ja-JP")}${t.hoursUnit}`;
 const formatYenValue = (yen) => {
+  if (locale === "en") {
+    if (yen >= 100_000_000) return `about ¥${(yen / 100_000_000).toFixed(1)}00M`;
+    if (yen >= 10_000) return `about ¥${(yen / 10_000).toFixed(0)}k`;
+    return `about ¥${Math.round(yen).toLocaleString("ja-JP")}`;
+  }
   if (yen >= 100_000_000) {
     return `約${(yen / 100_000_000).toFixed(1)}億円`;
   }
@@ -347,6 +471,21 @@ const formatYenValue = (yen) => {
   return `約${Math.round(yen).toLocaleString("ja-JP")}円`;
 };
 
+const formatWasteDetail = (activeYears, frequency, duration) =>
+  locale === "en"
+    ? `${Math.max(activeYears, 0)} years x ${frequency}/week x ${duration} min`
+    : `${Math.max(activeYears, 0)}年 x 週${frequency}回 x ${duration}分`;
+
+const formatHabitDetail = (activeYears, hoursPerDay, note) =>
+  locale === "en"
+    ? `${activeYears} years x 365 days x ${hoursPerDay} hours${note ? ` / ${note}` : ""}`
+    : `${activeYears}年 x 365日 x ${hoursPerDay}時間${note ? ` / ${note}` : ""}`;
+
+const formatEffortDetail = (activeYears, frequency, duration) =>
+  locale === "en"
+    ? `${Math.max(activeYears, 0)} years x ${frequency}/week x ${duration} min`
+    : `${Math.max(activeYears, 0)}年 x 週${frequency}回 x ${duration}分`;
+
 const getLifetimeMetrics = () => {
   const birthday = getBirthdayDate();
   if (birthday) {
@@ -354,7 +493,7 @@ const getLifetimeMetrics = () => {
     const elapsedMs = Math.max(now.getTime() - birthday.getTime(), 0);
     return {
       hours: elapsedMs / 3_600_000,
-      display: `${Math.floor(elapsedMs / 3_600_000).toLocaleString("ja-JP")}時間 ${Math.floor((elapsedMs % 3_600_000) / 60_000)}分 ${Math.floor((elapsedMs % 60_000) / 1000)}秒`,
+      display: `${Math.floor(elapsedMs / 3_600_000).toLocaleString("ja-JP")}${t.hoursUnit} ${Math.floor((elapsedMs % 3_600_000) / 60_000)}${t.minutesUnit} ${Math.floor((elapsedMs % 60_000) / 1000)}${t.secondsUnit}`,
     };
   }
 
@@ -362,7 +501,7 @@ const getLifetimeMetrics = () => {
   const hours = safeAge * 365 * 24;
   return {
     hours,
-    display: `${Math.round(hours).toLocaleString("ja-JP")}時間`,
+    display: `${Math.round(hours).toLocaleString("ja-JP")}${t.hoursUnit}`,
   };
 };
 
@@ -416,7 +555,11 @@ const renderPieHoverTargets = (items, lifetimeHours) => {
     path.setAttribute("class", "pie-segment");
     path.addEventListener("mouseenter", () => {
       pieTooltipTitle.textContent = item.name;
-      pieTooltipCopy.textContent = `${typeLabels[item.type]} / ${Math.round(item.hours).toLocaleString("ja-JP")}h / ${Math.round((item.hours / lifetimeHours) * 100)}%`;
+      pieTooltipCopy.textContent = t.pieTooltip(
+        typeLabels[item.type],
+        Math.round(item.hours).toLocaleString("ja-JP"),
+        Math.round((item.hours / lifetimeHours) * 100)
+      );
       pieTooltip.hidden = false;
     });
     path.addEventListener("mouseleave", hidePieTooltip);
@@ -439,14 +582,15 @@ const buildReport = (sortedItems, lifetimeHours, trackedHours, currentAge) => {
     const monthEquivalent = (topWaste.hours / (24 * 30)).toFixed(1);
     lines.push({
       title: `${formatHoursLabel(topWaste.hours)} を ${topWaste.name} に使っている`,
-      body: `約 ${monthEquivalent} か月に相当します。`,
+      title: t.reportTopWasteTitle(formatHoursLabel(topWaste.hours), topWaste.name),
+      body: t.reportTopWasteBody(monthEquivalent),
     });
   }
 
   if (topEffort) {
     lines.push({
-      title: `${formatHoursLabel(topEffort.hours)} を ${topEffort.name} に積み上げている`,
-      body: `かなり長い時間に相当します。`,
+      title: t.reportTopEffortTitle(formatHoursLabel(topEffort.hours), topEffort.name),
+      body: t.reportTopEffortBody,
     });
   }
 
@@ -457,8 +601,8 @@ const buildReport = (sortedItems, lifetimeHours, trackedHours, currentAge) => {
     const wasteAsset = (wasteTotal / focusedLifetimeHours) * lifetimeAssetYen;
 
     lines.push({
-      title: `無駄時間の合計は ${formatHoursLabel(wasteTotal)}`,
-      body: `今までの人生の時間から日常を除いて ${formatYenValue(lifetimeAssetYen)} とすると、これは ${formatYenValue(wasteAsset)} に相当します。`,
+      title: t.reportWasteTotalTitle(formatHoursLabel(wasteTotal)),
+      body: t.reportAssetWasteBody(formatYenValue(lifetimeAssetYen), formatYenValue(wasteAsset)),
     });
   }
 
@@ -466,15 +610,15 @@ const buildReport = (sortedItems, lifetimeHours, trackedHours, currentAge) => {
     const effortAsset = (effortTotal / focusedLifetimeHours) * lifetimeAssetYen;
 
     lines.push({
-      title: `頑張った時間の合計は ${formatHoursLabel(effortTotal)}`,
-      body: `今までの人生の時間から日常を除いて ${formatYenValue(lifetimeAssetYen)} とすると、これは ${formatYenValue(effortAsset)} に相当します。`,
+      title: t.reportEffortTotalTitle(formatHoursLabel(effortTotal)),
+      body: t.reportAssetEffortBody(formatYenValue(lifetimeAssetYen), formatYenValue(effortAsset)),
     });
   }
 
   if (!lines.length && trackedHours >= 0) {
     lines.push({
-      title: `${currentAge}年間は約${Math.round((lifetimeHours || 0)).toLocaleString("ja-JP")}時間`,
-      body: `無駄な時間か頑張った時間を入力すると、ここにレポートを出します。`,
+      title: t.reportEmptyTitle(currentAge, Math.round(lifetimeHours || 0).toLocaleString("ja-JP") + t.hoursUnit),
+      body: t.reportEmptyBody,
     });
   }
 
@@ -544,7 +688,7 @@ const getWasteItems = (currentAge) =>
         type: "waste",
         name,
         hours,
-        detail: `${Math.max(activeYears, 0)}年 x 週${frequency}回 x ${duration}分`,
+        detail: formatWasteDetail(activeYears, frequency, duration),
       };
     })
     .filter((item) => item.name && item.hours > 0);
@@ -564,7 +708,7 @@ const getHabitItems = (currentAge) =>
         type: "habit",
         name,
         hours,
-        detail: `${activeYears}年 x 365日 x ${hoursPerDay}時間${note ? ` / ${note}` : ""}`,
+        detail: formatHabitDetail(activeYears, hoursPerDay, note),
       };
     })
     .filter((item) => item.name && item.hours > 0);
@@ -584,7 +728,7 @@ const getEffortItems = (currentAge) =>
         type: "effort",
         name,
         hours,
-        detail: `${Math.max(activeYears, 0)}年 x 週${frequency}回 x ${duration}分`,
+        detail: formatEffortDetail(activeYears, frequency, duration),
       };
     })
     .filter((item) => item.name && item.hours > 0);
@@ -598,9 +742,9 @@ const renderCharts = (items, lifetimeHours, currentAge) => {
   const habitHours = items.filter((item) => item.type === "habit").reduce((sum, item) => sum + item.hours, 0);
   const untrackedItem = {
     type: "untracked",
-    name: "未入力",
+    name: t.untrackedName,
     hours: untrackedHours,
-    detail: "まだ入力していない時間",
+    detail: t.untrackedDetail,
     color: "#ffffff",
   };
   const compareItemsBase =
@@ -608,7 +752,7 @@ const renderCharts = (items, lifetimeHours, currentAge) => {
       ? [...nonRoutineItems, ...(untrackedHours > 0 ? [untrackedItem] : [])]
       : [...items, ...(untrackedHours > 0 ? [untrackedItem] : [])];
   const compareTotal = compareMode === "focused" ? lifetimeHours - habitHours : lifetimeHours;
-  const compareLabel = compareMode === "focused" ? "routineを除いた全体" : "人生全体";
+  const compareLabel = compareMode === "focused" ? t.compareLabelFocused : t.compareLabelAll;
 
   if (total <= 0) {
     ensureDots();
@@ -625,9 +769,9 @@ const renderCharts = (items, lifetimeHours, currentAge) => {
     legend.innerHTML = "";
     barChart.innerHTML = "";
     reportList.innerHTML = "";
-    totalHours.textContent = "0時間";
+    totalHours.textContent = t.zeroHours;
     largestCategory.textContent = "-";
-    summaryCopy.textContent = "入力したデータをもとに、人生全体の時間に対する割合を集計しています。";
+    summaryCopy.textContent = t.emptySummary;
     return;
   }
 
@@ -674,8 +818,8 @@ const renderCharts = (items, lifetimeHours, currentAge) => {
   renderPieHoverTargets(compareItems, Math.max(compareTotal, 1));
 
   totalHours.textContent = getLifetimeMetrics().display;
-  largestCategory.textContent = `${Math.round((trackedHours / lifetimeHours) * 100)}% tracked`;
-  summaryCopy.textContent = `${largest.name} が最も大きく、${compareLabel}に対して見ると存在感が大きい項目です。${typeLabels[largest.type]} は同系色でまとめています。`;
+  largestCategory.textContent = `${Math.round((trackedHours / lifetimeHours) * 100)}% ${t.tracked}`;
+  summaryCopy.textContent = t.summarySentence(largest.name, compareLabel, typeLabels[largest.type]);
 
   const legendItems =
     activeTab === "dot"
@@ -806,7 +950,7 @@ nextStepButtons.forEach((button) => {
 });
 
 addWasteButton.addEventListener("click", () => {
-  addWaste({ name: "新しい項目", startAge: 18, frequency: 3, duration: 30 });
+  addWaste({ name: t.newWaste, startAge: 18, frequency: 3, duration: 30 });
   render();
 });
 
@@ -818,7 +962,7 @@ addWastePresetButton.addEventListener("click", () => {
 });
 
 addHabitButton.addEventListener("click", () => {
-  addHabit({ name: "新しい習慣", startAge: 0, hoursPerDay: 1, note: "" });
+  addHabit({ name: t.newHabit, startAge: 0, hoursPerDay: 1, note: "" });
   render();
 });
 
@@ -830,7 +974,7 @@ addHabitPresetButton.addEventListener("click", () => {
 });
 
 addEffortButton.addEventListener("click", () => {
-  addEffort({ name: "新しい努力", startAge: 15, frequency: 4, duration: 60 });
+  addEffort({ name: t.newEffort, startAge: 15, frequency: 4, duration: 60 });
   render();
 });
 
@@ -845,26 +989,9 @@ toResultsButton.addEventListener("click", () => setStage("results"));
 backToInputButton.addEventListener("click", () => setStage("input"));
 toTweakButton.addEventListener("click", () => setStage("tweak"));
 
-[
-  { name: "YouTube", startAge: 15, frequency: 14, duration: 35 },
-  { name: "TikTok", startAge: 20, frequency: 10, duration: 18 },
-  { name: "Instagram", startAge: 16, frequency: 18, duration: 12 },
-  { name: "X", startAge: 17, frequency: 25, duration: 8 },
-  { name: "ネットサーフィン", startAge: 15, frequency: 7, duration: 25 },
-  { name: "なんとなくスマホ", startAge: 18, frequency: 14, duration: 10 },
-  { name: "先延ばし", startAge: 16, frequency: 7, duration: 20 },
-].forEach(addWaste);
-
-[
-  { name: "睡眠", startAge: 0, hoursPerDay: 8, note: "毎日" },
-  { name: "食事", startAge: 0, hoursPerDay: 1.5, note: "朝昼夜の合計" },
-  { name: "身支度", startAge: 0, hoursPerDay: 0.7, note: "風呂や準備" },
-].forEach(addHabit);
-
-[
-  { name: "勉強", startAge: 15, frequency: 5, duration: 90 },
-  { name: "筋トレ", startAge: 18, frequency: 3, duration: 75 },
-].forEach(addEffort);
+t.defaultWaste.forEach(addWaste);
+t.defaultHabit.forEach(addHabit);
+t.defaultEffort.forEach(addEffort);
 
 setStage("input");
 setDotMode("all");

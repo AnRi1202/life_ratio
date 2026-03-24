@@ -53,6 +53,34 @@ body::before {
   padding: 24px 0 40px;
 }
 
+.lang-switch {
+  display: inline-flex;
+  justify-self: end;
+  gap: 8px;
+}
+
+.lang-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 54px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 252, 247, 0.86);
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.lang-link.is-active {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  border-color: transparent;
+  color: #fffaf2;
+}
+
 .hero-layout {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(260px, 360px);
