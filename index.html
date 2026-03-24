@@ -8,94 +8,315 @@
       name="description"
       content="無駄時間と生涯習慣を入力すると、人生で消費した時間を円グラフと棒グラフで可視化するサイト。"
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Noto+Sans+JP:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <div class="page-shell">
       <header class="hero">
-        <div class="hero-copy">
-          <p class="eyebrow">life ratio</p>
-          <h1>人生の時間配分を、見える形にする。</h1>
-          <p class="lead">
-            無駄な時間、日々のタスク、頑張った時間を入力すると、
-            これまでの時間の使い方が可視化されます。
-          </p>
+        <div class="hero-layout">
+          <div class="hero-copy">
+            <p class="eyebrow">life ratio</p>
+            <h1>人生の時間配分を、見える形にする。</h1>
+            <p class="lead">
+              無駄な時間、日々のタスク、頑張った時間を入力すると、
+              これまでの時間の使い方が可視化されます。
+            </p>
+            <p class="lead">
+              ここでいう「無駄」は、正解があるものではありません。人によって大事な時間は違うし、
+              何を減らしたいかも違います。life ratio は、これまでを責めるためではなく、
+              これからどんな人生にしたいかを目に見える形にするためのツールです。
+            </p>
+          </div>
+
+          <aside class="hero-figure" aria-hidden="true">
+            <svg viewBox="0 0 320 320" class="hourglass-illustration">
+              <defs>
+                <linearGradient id="glassGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#355070" />
+                  <stop offset="50%" stop-color="#4f6d8a" />
+                  <stop offset="100%" stop-color="#7c90a8" />
+                </linearGradient>
+                <linearGradient id="sandGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#d08c60" />
+                  <stop offset="100%" stop-color="#a44a3f" />
+                </linearGradient>
+              </defs>
+
+              <circle cx="160" cy="160" r="136" fill="rgba(255,255,255,0.72)" />
+              <circle cx="86" cy="88" r="18" fill="#d08c60" opacity="0.88" />
+              <circle cx="238" cy="84" r="14" fill="#355070" opacity="0.88" />
+              <circle cx="250" cy="228" r="18" fill="#7c90a8" opacity="0.88" />
+              <circle cx="82" cy="236" r="12" fill="#a44a3f" opacity="0.88" />
+
+              <rect x="112" y="42" width="96" height="16" rx="8" fill="#2f4558" />
+              <rect x="112" y="262" width="96" height="16" rx="8" fill="#2f4558" />
+
+              <path
+                d="M124 58 C128 116, 148 132, 160 144 C172 132, 192 116, 196 58"
+                fill="none"
+                stroke="url(#glassGlow)"
+                stroke-width="12"
+                stroke-linecap="round"
+              />
+              <path
+                d="M124 262 C128 204, 148 188, 160 176 C172 188, 192 204, 196 262"
+                fill="none"
+                stroke="url(#glassGlow)"
+                stroke-width="12"
+                stroke-linecap="round"
+              />
+
+              <path d="M134 72 H186 C182 104, 170 122, 160 132 C150 122, 138 104, 134 72 Z" fill="rgba(255,255,255,0.82)" />
+              <path d="M140 84 H180 C176 104, 167 116, 160 122 C153 116, 144 104, 140 84 Z" fill="url(#sandGlow)" />
+
+              <path d="M134 248 H186 C182 216, 170 198, 160 188 C150 198, 138 216, 134 248 Z" fill="rgba(255,255,255,0.82)" />
+              <path d="M140 234 H180 C176 220, 168 208, 160 201 C152 208, 144 220, 140 234 Z" fill="url(#sandGlow)" />
+
+              <rect x="156" y="132" width="8" height="58" rx="4" fill="url(#sandGlow)" />
+
+              <circle cx="145" cy="220" r="4" fill="#d08c60" />
+              <circle cx="174" cy="228" r="5" fill="#a44a3f" />
+              <circle cx="160" cy="236" r="4" fill="#d08c60" />
+            </svg>
+          </aside>
         </div>
         <div class="hero-stats">
           <div>
-            <span>Waste</span>
+            <span>無駄</span>
             <strong>流されて消えた時間</strong>
           </div>
           <div>
-            <span>Routine</span>
+            <span>日常</span>
             <strong>毎日を支える時間</strong>
           </div>
           <div>
-            <span>Effort</span>
+            <span>努力</span>
             <strong>積み上げてきた時間</strong>
           </div>
         </div>
       </header>
 
-      <main class="app-grid">
+      <main class="app-shell" data-stage="input">
+        <div class="stage-switcher" role="tablist" aria-label="flow stages">
+          <button class="stage-pill active" type="button" data-stage-target="input">1. Input</button>
+          <button class="stage-pill" type="button" data-stage-target="results">2. Results</button>
+          <button class="stage-pill" type="button" data-stage-target="tweak">3. 見ながら調整</button>
+        </div>
+
+        <div class="app-grid">
         <section class="panel input-panel">
           <div class="section-heading">
             <p class="eyebrow">Input</p>
             <h2>時間の履歴を入れる</h2>
           </div>
 
-          <label class="field">
-            <span>現在の年齢</span>
-            <input id="current-age" type="number" min="1" max="120" value="25" />
-          </label>
+          <section class="flow-step is-active" data-flow-step="age">
+            <div class="step-head">
+              <p class="eyebrow">Step 1</p>
+              <h3>まず、生まれた年</h3>
+            </div>
+            <div class="age-step-grid">
+              <label class="field age-field age-field-primary">
+                <span>誕生年</span>
+                <input id="birth-year" type="number" min="1900" max="2026" value="2000" />
+              </label>
+              <label class="field age-field">
+                <span>誕生日(任意)</span>
+                <div class="birthday-inputs">
+                  <input id="birth-month" type="text" inputmode="numeric" placeholder="MM" aria-label="誕生月" />
+                  <span>/</span>
+                  <input id="birth-day" type="text" inputmode="numeric" placeholder="DD" aria-label="誕生日" />
+                </div>
+                <small class="field-hint">半角数字で入力</small>
+              </label>
+              <label class="field age-field age-field-derived">
+                <span>いまの年齢</span>
+                <input id="derived-age" type="text" value="25歳" readonly />
+              </label>
+            </div>
+            <div class="step-actions">
+              <button class="button" type="button" data-next-step="waste">決定して次へ</button>
+            </div>
+          </section>
 
-          <section class="group-block">
+          <section class="group-block flow-step" data-flow-step="waste">
             <div class="group-head">
               <div>
-                <p class="eyebrow">Waste Time</p>
+                <p class="eyebrow">Step 2</p>
                 <h3>これまでの無駄な時間</h3>
               </div>
-              <button class="button button-secondary" id="add-waste" type="button">項目を追加</button>
             </div>
 
             <p class="helper-copy">
-              候補例: YouTube, Instagram, X, TikTok, Netflix, Shorts, Gaming, Gossip, Porn, Aimless browsing
+              人によって「無駄」だと感じる時間は違います。一般論ではなく、
+              あなた自身が減らしたいと思っている時間を入れてください。娯楽だけでなく、
+              無駄な飲み会、悩んでる時間、先延ばしのような時間も含めてかまいません。
+              候補は系統ごとに分けてあるので、近いものから選べます。
             </p>
 
             <div id="waste-list" class="entry-list"></div>
+
+            <div class="step-actions">
+              <div class="quick-add">
+                <select id="waste-preset">
+                  <option value="">候補から選ぶ</option>
+                  <optgroup label="SNS・動画系">
+                    <option value="YouTube">YouTube</option>
+                    <option value="TikTok">TikTok</option>
+                    <option value="Instagram">Instagram</option>
+                    <option value="X">X</option>
+                    <option value="Netflix">Netflix</option>
+                    <option value="Twitch">Twitch</option>
+                    <option value="配信視聴">配信視聴</option>
+                    <option value="切り抜き視聴">切り抜き視聴</option>
+                    <option value="コメント欄巡回">コメント欄巡回</option>
+                    <option value="炎上ウォッチ">炎上ウォッチ</option>
+                    <option value="ゴシップ閲覧">ゴシップ閲覧</option>
+                  </optgroup>
+                  <optgroup label="だらだらネット系">
+                    <option value="ネットサーフィン">ネットサーフィン</option>
+                    <option value="なんとなくスマホ">なんとなくスマホ</option>
+                    <option value="目的のない検索">目的のない検索</option>
+                    <option value="まとめサイト巡回">まとめサイト巡回</option>
+                    <option value="ニュースアプリ巡回">ニュースアプリ巡回</option>
+                    <option value="レビュー漁り">レビュー漁り</option>
+                    <option value="通販サイト巡回">通販サイト巡回</option>
+                    <option value="セール巡回">セール巡回</option>
+                    <option value="フリマアプリ閲覧">フリマアプリ閲覧</option>
+                  </optgroup>
+                  <optgroup label="ゲーム系">
+                    <option value="ソシャゲ">ソシャゲ</option>
+                    <option value="据え置きゲーム">据え置きゲーム</option>
+                    <option value="PCゲーム">PCゲーム</option>
+                    <option value="ランク上げ">ランク上げ</option>
+                    <option value="デイリー消化">デイリー消化</option>
+                    <option value="放置ゲー">放置ゲー</option>
+                    <option value="攻略サイト閲覧">攻略サイト閲覧</option>
+                    <option value="編成いじり">編成いじり</option>
+                    <option value="ガチャ演出閲覧">ガチャ演出閲覧</option>
+                  </optgroup>
+                  <optgroup label="逃避・依存系">
+                    <option value="ポルノ">ポルノ</option>
+                    <option value="オナニー">オナニー</option>
+                    <option value="ギャンブル">ギャンブル</option>
+                    <option value="パチンコ・スロット">パチンコ・スロット</option>
+                    <option value="競馬・競艇など">競馬・競艇など</option>
+                    <option value="ガチャ課金まわり">ガチャ課金まわり</option>
+                    <option value="夜更かし">夜更かし</option>
+                    <option value="二度寝">二度寝</option>
+                    <option value="寝すぎ">寝すぎ</option>
+                    <option value="ベッドでスマホ">ベッドでスマホ</option>
+                  </optgroup>
+                  <optgroup label="人間関係・会話系">
+                    <option value="だらだら通話">だらだら通話</option>
+                    <option value="だらだらLINE">だらだらLINE</option>
+                    <option value="不要なDM確認">不要なDM確認</option>
+                    <option value="ゴシップ会話">ゴシップ会話</option>
+                    <option value="意味のない会議">意味のない会議</option>
+                    <option value="空気で参加している集まり">空気で参加している集まり</option>
+                    <option value="無駄な飲み会">無駄な飲み会</option>
+                  </optgroup>
+                  <optgroup label="生活ロス系">
+                    <option value="通学・通勤">通学・通勤</option>
+                    <option value="待ち時間">待ち時間</option>
+                    <option value="行列">行列</option>
+                    <option value="乗り換え待ち">乗り換え待ち</option>
+                    <option value="身支度">身支度</option>
+                    <option value="掃除">掃除</option>
+                    <option value="洗濯">洗濯</option>
+                    <option value="料理">料理</option>
+                    <option value="片付け">片付け</option>
+                  </optgroup>
+                  <optgroup label="先延ばし・不安系">
+                    <option value="先延ばし">先延ばし</option>
+                    <option value="やる気待ち">やる気待ち</option>
+                    <option value="ToDo整理だけして終わる">ToDo整理だけして終わる</option>
+                    <option value="Notionいじり">Notionいじり</option>
+                    <option value="情報収集しすぎ">情報収集しすぎ</option>
+                    <option value="完璧主義で着手できない時間">完璧主義で着手できない時間</option>
+                    <option value="将来不安で動けない時間">将来不安で動けない時間</option>
+                    <option value="悩んでる時間">悩んでる時間</option>
+                  </optgroup>
+                </select>
+                <button class="button button-secondary" id="add-waste-preset" type="button">候補を追加</button>
+              </div>
+              <button class="button button-secondary" id="add-waste" type="button">項目を追加</button>
+              <button class="button" type="button" data-next-step="habit">ここまで入力した</button>
+            </div>
           </section>
 
-          <section class="group-block">
+          <section class="group-block flow-step" data-flow-step="habit">
             <div class="group-head">
               <div>
-                <p class="eyebrow">Lifelong Habits</p>
+                <p class="eyebrow">Step 3</p>
                 <h3>日々のタスク</h3>
               </div>
-              <button class="button button-secondary" id="add-habit" type="button">項目を追加</button>
             </div>
 
             <p class="helper-copy">
-              例: 睡眠、食事、身支度、通学、家事。23歳で睡眠8時間/日なら `23 x 365 x 8 = 67,160時間` です。
+              ここは主役ではなく、全体の配分を出すための土台です。睡眠や食事のような日々の活動時間を入れることで、
+              「無駄」や「努力」が人生全体の中でどれくらいの重さなのかが見えるようになります。
             </p>
 
             <div id="habit-list" class="entry-list"></div>
+
+            <div class="step-actions">
+              <div class="quick-add">
+                <select id="habit-preset">
+                  <option value="">候補から選ぶ</option>
+                  <option value="sleep">睡眠</option>
+                  <option value="meals">食事</option>
+                  <option value="grooming">身支度</option>
+                  <option value="commute">通学・通勤</option>
+                  <option value="housework">家事</option>
+                </select>
+                <button class="button button-secondary" id="add-habit-preset" type="button">候補を追加</button>
+              </div>
+              <button class="button button-secondary" id="add-habit" type="button">項目を追加</button>
+              <button class="button" type="button" data-next-step="effort">ここまで入力した</button>
+            </div>
           </section>
 
-          <section class="group-block">
+          <section class="group-block flow-step" data-flow-step="effort">
             <div class="group-head">
               <div>
-                <p class="eyebrow">Effort Time</p>
+                <p class="eyebrow">Step 4</p>
                 <h3>頑張った時間</h3>
               </div>
-              <button class="button button-secondary" id="add-effort" type="button">項目を追加</button>
             </div>
 
             <p class="helper-copy">
-              例: 勉強、筋トレ、読書、制作、資格勉強、研究。
+              あとから振り返ったときに、「これはちゃんと積み上げた」と思える時間を入れてください。
+              勉強、筋トレ、読書、制作、資格勉強、研究。未来の自分に残したい時間です。
             </p>
 
             <div id="effort-list" class="entry-list"></div>
+
+            <div class="step-actions">
+              <div class="quick-add">
+                <select id="effort-preset">
+                  <option value="">候補から選ぶ</option>
+                  <option value="study">勉強</option>
+                  <option value="workout">筋トレ</option>
+                  <option value="reading">読書</option>
+                  <option value="building">制作</option>
+                  <option value="research">研究</option>
+                </select>
+                <button class="button button-secondary" id="add-effort-preset" type="button">候補を追加</button>
+              </div>
+              <button class="button button-secondary" id="add-effort" type="button">項目を追加</button>
+            </div>
           </section>
+
+          <div class="panel-actions">
+            <button class="button" id="to-results" type="button">結果を見る</button>
+          </div>
         </section>
 
         <section class="panel output-panel">
@@ -118,32 +339,51 @@
             </div>
           </div>
 
-          <div class="viz-tabs" role="tablist" aria-label="visualization tabs">
-            <button class="viz-tab active" type="button" role="tab" aria-selected="true" data-tab="dot">Dot</button>
-            <button class="viz-tab" type="button" role="tab" aria-selected="false" data-tab="pie">Pie</button>
-            <button class="viz-tab" type="button" role="tab" aria-selected="false" data-tab="bar">Bar</button>
-            <button class="viz-tab" type="button" role="tab" aria-selected="false" data-tab="report">Report</button>
+        <div class="viz-tabs" role="tablist" aria-label="visualization tabs">
+            <button class="viz-tab active" type="button" role="tab" aria-selected="true" data-tab="dot">
+              <span class="viz-icon">▦</span>
+              <span>侵食マップ</span>
+            </button>
+            <button class="viz-tab" type="button" role="tab" aria-selected="false" data-tab="pie">
+              <span class="viz-icon">◔</span>
+              <span>全体の割合</span>
+            </button>
+            <button class="viz-tab" type="button" role="tab" aria-selected="false" data-tab="bar">
+              <span class="viz-icon">▤</span>
+              <span>項目ごとの比較</span>
+            </button>
+            <button class="viz-tab" type="button" role="tab" aria-selected="false" data-tab="report">
+              <span class="viz-icon">✦</span>
+              <span>文章で読む</span>
+            </button>
           </div>
 
           <div class="viz-panels">
             <section class="chart-card viz-panel active" data-panel="dot">
               <div class="chart-head">
-                <p class="eyebrow">Dot Field</p>
-                <strong>小さなドットが徐々に侵食する</strong>
+                <p class="eyebrow">Erosion View</p>
               </div>
-              <div class="pie-wrap">
+              <div class="sub-toggle" role="tablist" aria-label="erosion modes">
+                <button class="sub-toggle-button active" type="button" data-dot-mode="all">日常込み</button>
+                <button class="sub-toggle-button" type="button" data-dot-mode="focused">日常を除く</button>
+              </div>
+              <div class="erosion-wrap">
                 <div id="pie-chart" class="pie-chart" aria-hidden="true"></div>
-                <div class="pie-center">
-                  <span>lifetime total</span>
-                  <strong id="pie-total">0h</strong>
+                <div id="dot-tooltip" class="dot-tooltip" hidden>
+                  <strong id="dot-tooltip-title"></strong>
+                  <span id="dot-tooltip-copy"></span>
                 </div>
               </div>
             </section>
 
             <section class="chart-card viz-panel" data-panel="pie">
               <div class="chart-head">
-                <p class="eyebrow">Pie Chart</p>
-                <strong>人生全体に対する割合</strong>
+                <p class="eyebrow">Ratio View</p>
+                <strong>人生全体の中でどれくらい占めるか</strong>
+              </div>
+              <div class="sub-toggle" role="tablist" aria-label="compare modes pie">
+                <button class="sub-toggle-button compare-toggle active" type="button" data-compare-mode="all">日常込み</button>
+                <button class="sub-toggle-button compare-toggle" type="button" data-compare-mode="focused">日常を除く</button>
               </div>
               <div class="classic-pie-wrap">
                 <div class="classic-pie-shell">
@@ -159,16 +399,20 @@
 
             <section class="chart-card viz-panel" data-panel="bar">
               <div class="chart-head">
-                <p class="eyebrow">Bar Chart</p>
-                <strong>人生全体に対する比較</strong>
+                <p class="eyebrow">Compare View</p>
+                <strong>どの項目がどれだけ大きいか</strong>
+              </div>
+              <div class="sub-toggle" role="tablist" aria-label="compare modes bar">
+                <button class="sub-toggle-button compare-toggle active" type="button" data-compare-mode="all">日常込み</button>
+                <button class="sub-toggle-button compare-toggle" type="button" data-compare-mode="focused">日常を除く</button>
               </div>
               <div id="bar-chart" class="bar-chart"></div>
             </section>
 
             <section class="chart-card viz-panel report-card" data-panel="report">
               <div class="chart-head">
-                <p class="eyebrow">Report</p>
-                <strong>何時間分は何に相当するか</strong>
+                <p class="eyebrow">Narrative View</p>
+                <strong>無駄と努力を文章で読む</strong>
               </div>
               <div id="report-list" class="report-list"></div>
             </section>
@@ -181,7 +425,13 @@
             </div>
             <div id="legend" class="legend"></div>
           </section>
+
+          <div class="panel-actions output-actions">
+            <button class="button button-secondary" id="back-to-input" type="button">入力に戻る</button>
+            <button class="button" id="to-tweak" type="button">見ながら調整する</button>
+          </div>
         </section>
+        </div>
       </main>
     </div>
 
@@ -280,15 +530,68 @@
 
     <datalist id="waste-suggestions">
       <option value="YouTube"></option>
+      <option value="TikTok"></option>
       <option value="Instagram"></option>
       <option value="X"></option>
-      <option value="TikTok"></option>
       <option value="Netflix"></option>
-      <option value="Shorts"></option>
-      <option value="Gaming"></option>
-      <option value="Porn"></option>
-      <option value="Aimless browsing"></option>
-      <option value="Gossip"></option>
+      <option value="Twitch"></option>
+      <option value="配信視聴"></option>
+      <option value="切り抜き視聴"></option>
+      <option value="コメント欄巡回"></option>
+      <option value="炎上ウォッチ"></option>
+      <option value="ゴシップ閲覧"></option>
+      <option value="ネットサーフィン"></option>
+      <option value="なんとなくスマホ"></option>
+      <option value="目的のない検索"></option>
+      <option value="まとめサイト巡回"></option>
+      <option value="ニュースアプリ巡回"></option>
+      <option value="レビュー漁り"></option>
+      <option value="通販サイト巡回"></option>
+      <option value="セール巡回"></option>
+      <option value="フリマアプリ閲覧"></option>
+      <option value="ソシャゲ"></option>
+      <option value="据え置きゲーム"></option>
+      <option value="PCゲーム"></option>
+      <option value="ランク上げ"></option>
+      <option value="デイリー消化"></option>
+      <option value="放置ゲー"></option>
+      <option value="攻略サイト閲覧"></option>
+      <option value="編成いじり"></option>
+      <option value="ガチャ演出閲覧"></option>
+      <option value="ポルノ"></option>
+      <option value="オナニー"></option>
+      <option value="ギャンブル"></option>
+      <option value="パチンコ・スロット"></option>
+      <option value="競馬・競艇など"></option>
+      <option value="ガチャ課金まわり"></option>
+      <option value="夜更かし"></option>
+      <option value="二度寝"></option>
+      <option value="寝すぎ"></option>
+      <option value="ベッドでスマホ"></option>
+      <option value="だらだら通話"></option>
+      <option value="だらだらLINE"></option>
+      <option value="不要なDM確認"></option>
+      <option value="ゴシップ会話"></option>
+      <option value="意味のない会議"></option>
+      <option value="空気で参加している集まり"></option>
+      <option value="無駄な飲み会"></option>
+      <option value="通学・通勤"></option>
+      <option value="待ち時間"></option>
+      <option value="行列"></option>
+      <option value="乗り換え待ち"></option>
+      <option value="身支度"></option>
+      <option value="掃除"></option>
+      <option value="洗濯"></option>
+      <option value="料理"></option>
+      <option value="片付け"></option>
+      <option value="先延ばし"></option>
+      <option value="やる気待ち"></option>
+      <option value="ToDo整理だけして終わる"></option>
+      <option value="Notionいじり"></option>
+      <option value="情報収集しすぎ"></option>
+      <option value="完璧主義で着手できない時間"></option>
+      <option value="将来不安で動けない時間"></option>
+      <option value="悩んでる時間"></option>
     </datalist>
 
     <script src="./script.js"></script>
