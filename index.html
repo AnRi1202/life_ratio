@@ -14,25 +14,25 @@
     <div class="page-shell">
       <header class="hero">
         <div class="hero-copy">
-          <p class="eyebrow">Life Audit Tool</p>
-          <h1>あなたの時間は、何に消えているか。</h1>
+          <p class="eyebrow">life ratio</p>
+          <h1>人生の時間配分を、見える形にする。</h1>
           <p class="lead">
-            YouTube、Instagram、X、pornのような無駄時間と、睡眠や食事のような生涯習慣を入力すると、
-            これまでに使った時間を円グラフと棒グラフで可視化します。
+            無駄な時間、日々のタスク、頑張った時間を入力すると、
+            これまでの時間の使い方が可視化されます。
           </p>
         </div>
         <div class="hero-stats">
           <div>
-            <span>Input</span>
-            <strong>開始年齢 / 頻度 / 1回時間</strong>
+            <span>Waste</span>
+            <strong>流されて消えた時間</strong>
           </div>
           <div>
-            <span>Output</span>
-            <strong>累積時間の比較</strong>
+            <span>Routine</span>
+            <strong>毎日を支える時間</strong>
           </div>
           <div>
-            <span>View</span>
-            <strong>Pie + Bars</strong>
+            <span>Effort</span>
+            <strong>積み上げてきた時間</strong>
           </div>
         </div>
       </header>
@@ -40,8 +40,8 @@
       <main class="app-grid">
         <section class="panel input-panel">
           <div class="section-heading">
-            <p class="eyebrow">Profile</p>
-            <h2>まずは現在地を入れる</h2>
+            <p class="eyebrow">Input</p>
+            <h2>時間の履歴を入れる</h2>
           </div>
 
           <label class="field">
@@ -101,7 +101,7 @@
         <section class="panel output-panel">
           <div class="section-heading">
             <p class="eyebrow">Results</p>
-            <h2>時間の配分がそのまま出る</h2>
+            <h2>あなたの life ratio</h2>
             <p id="summary-copy">
               入力したデータをもとに、これまでの累積時間をカテゴリ別に集計しています。
             </p>
@@ -201,6 +201,10 @@
             <input data-start-age type="number" min="0" max="120" value="18" />
           </label>
           <label class="field">
+            <span>何歳まで？(任意)</span>
+            <input data-end-age type="number" min="0" max="120" placeholder="現在まで" />
+          </label>
+          <label class="field">
             <span>頻度 / 週</span>
             <input data-frequency type="number" min="0" step="0.1" value="7" />
           </label>
@@ -228,6 +232,10 @@
             <input data-start-age type="number" min="0" max="120" value="0" />
           </label>
           <label class="field">
+            <span>何歳まで？(任意)</span>
+            <input data-end-age type="number" min="0" max="120" placeholder="現在まで" />
+          </label>
+          <label class="field">
             <span>1日あたり(時間)</span>
             <input data-hours-per-day type="number" min="0" step="0.1" value="8" />
           </label>
@@ -253,6 +261,10 @@
           <label class="field">
             <span>何歳から？</span>
             <input data-start-age type="number" min="0" max="120" value="15" />
+          </label>
+          <label class="field">
+            <span>何歳まで？(任意)</span>
+            <input data-end-age type="number" min="0" max="120" placeholder="現在まで" />
           </label>
           <label class="field">
             <span>頻度 / 週</span>

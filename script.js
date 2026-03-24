@@ -106,6 +106,13 @@ const animateDots = (items, total) => {
 
 const formatHoursLabel = (hours) => `${Math.round(hours).toLocaleString("ja-JP")}時間`;
 
+const getActiveYears = (currentAge, startAge, endAgeRaw) => {
+  const parsedEndAge = Number(endAgeRaw);
+  const cappedEndAge =
+    Number.isFinite(parsedEndAge) && endAgeRaw !== "" ? Math.min(parsedEndAge, currentAge) : currentAge;
+  return Math.max(cappedEndAge - startAge, 0);
+};
+
 const polarToCartesian = (centerX, centerY, radius, angleInDegrees) => {
   const angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180;
   return {
@@ -230,36 +237,39 @@ const buildReport = (sortedItems, lifetimeHours, trackedHours, currentAge) => {
     .join("");
 };
 
-const createWasteEntry = ({ name, startAge, frequency, duration }) => {
+const createWasteEntry = ({ name, startAge, endAge = "", frequency, duration }) => {
   const fragment = wasteTemplate.content.cloneNode(true);
   const card = fragment.querySelector(".entry-card");
 
   card.querySelector("[data-name]").value = name;
   card.querySelector("[data-start-age]").value = startAge;
+  card.querySelector("[data-end-age]").value = endAge;
   card.querySelector("[data-frequency]").value = frequency;
   card.querySelector("[data-duration]").value = duration;
 
   return fragment;
 };
 
-const createHabitEntry = ({ name, startAge, hoursPerDay, note }) => {
+const createHabitEntry = ({ name, startAge, endAge = "", hoursPerDay, note }) => {
   const fragment = habitTemplate.content.cloneNode(true);
   const card = fragment.querySelector(".entry-card");
 
   card.querySelector("[data-name]").value = name;
   card.querySelector("[data-start-age]").value = startAge;
+  card.querySelector("[data-end-age]").value = endAge;
   card.querySelector("[data-hours-per-day]").value = hoursPerDay;
   card.querySelector("[data-note]").value = note;
 
   return fragment;
 };
 
-const createEffortEntry = ({ name, startAge, frequency, duration }) => {
+const createEffortEntry = ({ name, startAge, endAge = "", frequency, duration }) => {
   const fragment = effortTemplate.content.cloneNode(true);
   const card = fragment.querySelector(".entry-card");
 
   card.querySelector("[data-name]").value = name;
   card.querySelector("[data-start-age]").value = startAge;
+  card.querySelector("[data-end-age]").value = endAge;
   card.querySelector("[data-frequency]").value = frequency;
   card.querySelector("[data-duration]").value = duration;
 
@@ -271,9 +281,10 @@ const getWasteItems = (currentAge) =>
     .map((card) => {
       const name = card.querySelector("[data-name]").value.trim();
       const startAge = Number(card.querySelector("[data-start-age]").value);
+      const endAgeRaw = card.querySelector("[data-end-age]").value;
       const frequency = Number(card.querySelector("[data-frequency]").value);
       const duration = Number(card.querySelector("[data-duration]").value);
-      const activeYears = Math.max(currentAge - startAge, 0);
+      const activeYears = getActiveYears(currentAge, startAge, endAgeRaw);
       const hours = activeYears * 52 * frequency * (duration / 60);
 
       return {
@@ -290,9 +301,10 @@ const getHabitItems = (currentAge) =>
     .map((card) => {
       const name = card.querySelector("[data-name]").value.trim();
       const startAge = Number(card.querySelector("[data-start-age]").value);
+      const endAgeRaw = card.querySelector("[data-end-age]").value;
       const hoursPerDay = Number(card.querySelector("[data-hours-per-day]").value);
       const note = card.querySelector("[data-note]").value.trim();
-      const activeYears = Math.max(currentAge - startAge, 0);
+      const activeYears = getActiveYears(currentAge, startAge, endAgeRaw);
       const hours = activeYears * 365 * hoursPerDay;
 
       return {
@@ -309,9 +321,10 @@ const getEffortItems = (currentAge) =>
     .map((card) => {
       const name = card.querySelector("[data-name]").value.trim();
       const startAge = Number(card.querySelector("[data-start-age]").value);
+      const endAgeRaw = card.querySelector("[data-end-age]").value;
       const frequency = Number(card.querySelector("[data-frequency]").value);
       const duration = Number(card.querySelector("[data-duration]").value);
-      const activeYears = Math.max(currentAge - startAge, 0);
+      const activeYears = getActiveYears(currentAge, startAge, endAgeRaw);
       const hours = activeYears * 52 * frequency * (duration / 60);
 
       return {
