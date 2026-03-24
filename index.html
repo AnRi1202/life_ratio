@@ -91,28 +91,17 @@
             </svg>
           </aside>
         </div>
-        <div class="hero-stats">
-          <div>
-            <span>無駄</span>
-            <strong>流されて消えた時間</strong>
-          </div>
-          <div>
-            <span>日常</span>
-            <strong>毎日を支える時間</strong>
-          </div>
-          <div>
-            <span>努力</span>
-            <strong>積み上げてきた時間</strong>
-          </div>
-        </div>
       </header>
 
       <main class="app-shell" data-stage="input">
         <div class="stage-switcher" role="tablist" aria-label="flow stages">
-          <button class="stage-pill active" type="button" data-stage-target="input">1. Input</button>
-          <button class="stage-pill" type="button" data-stage-target="results">2. Results</button>
-          <button class="stage-pill" type="button" data-stage-target="tweak">3. 見ながら調整</button>
+          <button class="stage-pill active" type="button" data-stage-target="input">1. 入力する</button>
+          <button class="stage-pill" type="button" data-stage-target="results">2. 途中でも結果を見る</button>
+          <button class="stage-pill" type="button" data-stage-target="tweak">3. 見ながら足す</button>
         </div>
+        <p class="stage-helper">
+          Step 1 から順に入れれば十分です。全部埋めなくても、途中の状態で結果を見られます。
+        </p>
 
         <div class="app-grid">
         <section class="panel input-panel">
@@ -121,10 +110,28 @@
             <h2>時間の履歴を入れる</h2>
           </div>
 
+          <div class="input-guide">
+            <div class="guide-card guide-card-age">
+              <span>Step 1</span>
+              <strong>まず、生まれた年を入れる</strong>
+              <p>全体の人生時間を計算するための土台です。</p>
+            </div>
+            <div class="guide-card guide-card-waste">
+              <span>Step 2</span>
+              <strong>次に、減らしたい時間を書く</strong>
+              <p>娯楽でも先延ばしでも、あなたが見直したい時間で大丈夫です。</p>
+            </div>
+            <div class="guide-card guide-card-next">
+              <span>Step 3-4</span>
+              <strong>必要なら日常や努力も足す</strong>
+              <p>途中まででも結果を見られます。あとから追加や微調整もできます。</p>
+            </div>
+          </div>
+
           <section class="flow-step is-active" data-flow-step="age">
             <div class="step-head">
               <p class="eyebrow">Step 1</p>
-              <h3>まず、生まれた年</h3>
+              <h3>まず、生まれた年を入れる</h3>
             </div>
             <div class="age-step-grid">
               <label class="field age-field age-field-primary">
@@ -154,7 +161,7 @@
             <div class="group-head">
               <div>
                 <p class="eyebrow">Step 2</p>
-                <h3>これまでの無駄な時間</h3>
+                <h3>次に、減らしたい時間を書く</h3>
               </div>
             </div>
 
@@ -259,7 +266,7 @@
             <div class="group-head">
               <div>
                 <p class="eyebrow">Step 3</p>
-                <h3>日々のタスク</h3>
+                <h3>必要なら、毎日支える時間も入れる</h3>
               </div>
             </div>
 
@@ -291,7 +298,7 @@
             <div class="group-head">
               <div>
                 <p class="eyebrow">Step 4</p>
-                <h3>頑張った時間</h3>
+                <h3>最後に、積み上げてきた時間を書く</h3>
               </div>
             </div>
 

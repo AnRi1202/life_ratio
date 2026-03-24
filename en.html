@@ -88,34 +88,41 @@
             </svg>
           </aside>
         </div>
-        <div class="hero-stats">
-          <div>
-            <span>Drift</span>
-            <strong>Time that slipped away</strong>
-          </div>
-          <div>
-            <span>Routine</span>
-            <strong>Time that keeps daily life running</strong>
-          </div>
-          <div>
-            <span>Effort</span>
-            <strong>Time you intentionally built</strong>
-          </div>
-        </div>
       </header>
 
       <main class="app-shell" data-stage="input">
         <div class="stage-switcher" role="tablist" aria-label="flow stages">
-          <button class="stage-pill active" type="button" data-stage-target="input">1. Input</button>
-          <button class="stage-pill" type="button" data-stage-target="results">2. Results</button>
-          <button class="stage-pill" type="button" data-stage-target="tweak">3. Adjust While Viewing</button>
+          <button class="stage-pill active" type="button" data-stage-target="input">1. Enter your inputs</button>
+          <button class="stage-pill" type="button" data-stage-target="results">2. View results anytime</button>
+          <button class="stage-pill" type="button" data-stage-target="tweak">3. Add more while viewing</button>
         </div>
+        <p class="stage-helper">
+          Starting from Step 1 is enough. You can view the results before filling in everything, then come back and refine.
+        </p>
 
         <div class="app-grid">
         <section class="panel input-panel">
           <div class="section-heading">
             <p class="eyebrow">Input</p>
             <h2>Enter your time history</h2>
+          </div>
+
+          <div class="input-guide">
+            <div class="guide-card guide-card-age">
+              <span>Step 1</span>
+              <strong>Start with your birth year</strong>
+              <p>This sets the baseline for your total lifetime.</p>
+            </div>
+            <div class="guide-card guide-card-waste">
+              <span>Step 2</span>
+              <strong>Then add the time you want less of</strong>
+              <p>Entertainment, procrastination, overthinking, or anything else you want to cut back on.</p>
+            </div>
+            <div class="guide-card guide-card-next">
+              <span>Step 3-4</span>
+              <strong>Add routine and effort only if useful</strong>
+              <p>You can check the results midway, then return and adjust later.</p>
+            </div>
           </div>
 
           <section class="flow-step is-active" data-flow-step="age">
@@ -151,7 +158,7 @@
             <div class="group-head">
               <div>
                 <p class="eyebrow">Step 2</p>
-                <h3>Time you tend to lose</h3>
+                <h3>Then add the time you want less of</h3>
               </div>
             </div>
 
@@ -253,7 +260,7 @@
             <div class="group-head">
               <div>
                 <p class="eyebrow">Step 3</p>
-                <h3>Daily tasks</h3>
+                <h3>Add routine time if it helps</h3>
               </div>
             </div>
 
@@ -284,7 +291,7 @@
             <div class="group-head">
               <div>
                 <p class="eyebrow">Step 4</p>
-                <h3>Effort time</h3>
+                <h3>Finish with time you built on purpose</h3>
               </div>
             </div>
 
