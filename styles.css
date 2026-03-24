@@ -1081,7 +1081,6 @@ input[data-name]::placeholder {
   }
 
   .group-head,
-  .entry-top,
   .summary-grid,
   .viz-tabs,
   .sub-toggle,
@@ -1092,7 +1091,6 @@ input[data-name]::placeholder {
   }
 
   .group-head,
-  .entry-top,
   .bar-meta,
   .viz-tabs,
   .sub-toggle,
@@ -1111,6 +1109,21 @@ input[data-name]::placeholder {
   .quick-add > * {
     min-width: 0;
     width: 100%;
+  }
+
+  .entry-top {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 10px;
+  }
+
+  .entry-top .field {
+    min-width: 0;
+  }
+
+  .entry-top .icon-button {
+    justify-self: end;
   }
 
   .entry-grid,

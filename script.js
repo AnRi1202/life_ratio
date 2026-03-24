@@ -43,20 +43,14 @@ const copy = {
     defaultWaste: [
       { name: "YouTube", startAge: 15, frequency: 14, duration: 35 },
       { name: "TikTok", startAge: 20, frequency: 10, duration: 18 },
-      { name: "Instagram", startAge: 16, frequency: 18, duration: 12 },
-      { name: "X", startAge: 17, frequency: 25, duration: 8 },
-      { name: "ネットサーフィン", startAge: 15, frequency: 7, duration: 25 },
-      { name: "なんとなくスマホ", startAge: 18, frequency: 14, duration: 10 },
       { name: "先延ばし", startAge: 16, frequency: 7, duration: 20 },
     ],
     defaultHabit: [
       { name: "睡眠", startAge: 0, hoursPerDay: 8, note: "毎日" },
       { name: "食事", startAge: 0, hoursPerDay: 1.5, note: "朝昼夜の合計" },
-      { name: "身支度", startAge: 0, hoursPerDay: 0.7, note: "風呂や準備" },
     ],
     defaultEffort: [
       { name: "勉強", startAge: 15, frequency: 5, duration: 90 },
-      { name: "筋トレ", startAge: 18, frequency: 3, duration: 75 },
     ],
     habitPresets: {
       sleep: { name: "睡眠", startAge: 0, hoursPerDay: 8, note: "毎日" },
@@ -112,20 +106,14 @@ const copy = {
     defaultWaste: [
       { name: "YouTube", startAge: 15, frequency: 14, duration: 35 },
       { name: "TikTok", startAge: 20, frequency: 10, duration: 18 },
-      { name: "Instagram", startAge: 16, frequency: 18, duration: 12 },
-      { name: "X", startAge: 17, frequency: 25, duration: 8 },
-      { name: "Aimless browsing", startAge: 15, frequency: 7, duration: 25 },
-      { name: "Phone scrolling", startAge: 18, frequency: 14, duration: 10 },
       { name: "Procrastination", startAge: 16, frequency: 7, duration: 20 },
     ],
     defaultHabit: [
       { name: "Sleep", startAge: 0, hoursPerDay: 8, note: "Every day" },
       { name: "Meals", startAge: 0, hoursPerDay: 1.5, note: "Breakfast, lunch, dinner" },
-      { name: "Getting ready", startAge: 0, hoursPerDay: 0.7, note: "Shower and prep" },
     ],
     defaultEffort: [
       { name: "Study", startAge: 15, frequency: 5, duration: 90 },
-      { name: "Workout", startAge: 18, frequency: 3, duration: 75 },
     ],
     habitPresets: {
       sleep: { name: "Sleep", startAge: 0, hoursPerDay: 8, note: "Every day" },
