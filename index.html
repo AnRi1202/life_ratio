@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>life ratio</title>
+    <meta
+      name="description"
+      content="無駄時間と生涯習慣を入力すると、人生で消費した時間を円グラフと棒グラフで可視化するサイト。"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Life Audit Tool</p>
+          <h1>あなたの時間は、何に消えているか。</h1>
+          <p class="lead">
+            YouTube、Instagram、X、pornのような無駄時間と、睡眠や食事のような生涯習慣を入力すると、
+            これまでに使った時間を円グラフと棒グラフで可視化します。
+          </p>
+        </div>
+        <div class="hero-stats">
+          <div>
+            <span>Input</span>
+            <strong>開始年齢 / 頻度 / 1回時間</strong>
+          </div>
+          <div>
+            <span>Output</span>
+            <strong>累積時間の比較</strong>
+          </div>
+          <div>
+            <span>View</span>
+            <strong>Pie + Bars</strong>
+          </div>
+        </div>
+      </header>
+
+      <main class="app-grid">
+        <section class="panel input-panel">
+          <div class="section-heading">
+            <p class="eyebrow">Profile</p>
+            <h2>まずは現在地を入れる</h2>
+          </div>
+
+          <label class="field">
+            <span>現在の年齢</span>
+            <input id="current-age" type="number" min="1" max="120" value="25" />
+          </label>
+
+          <section class="group-block">
+            <div class="group-head">
+              <div>
+                <p class="eyebrow">Waste Time</p>
+                <h3>これまでの無駄な時間</h3>
+              </div>
+              <button class="button button-secondary" id="add-waste" type="button">項目を追加</button>
+            </div>
+
+            <p class="helper-copy">
+              候補例: YouTube, Instagram, X, TikTok, Netflix, Shorts, Gaming, Gossip, Porn, Aimless browsing
+            </p>
+
+            <div id="waste-list" class="entry-list"></div>
+          </section>
+
+          <section class="group-block">
+            <div class="group-head">
+              <div>
+                <p class="eyebrow">Lifelong Habits</p>
+                <h3>日々のタスク</h3>
+              </div>
+              <button class="button button-secondary" id="add-habit" type="button">項目を追加</button>
+            </div>
+
+            <p class="helper-copy">
+              例: 睡眠、食事、身支度、通学、家事。23歳で睡眠8時間/日なら `23 x 365 x 8 = 67,160時間` です。
+            </p>
+
+            <div id="habit-list" class="entry-list"></div>
+          </section>
+
+          <section class="group-block">
+            <div class="group-head">
+              <div>
+                <p class="eyebrow">Effort Time</p>
+                <h3>頑張った時間</h3>
+              </div>
+              <button class="button button-secondary" id="add-effort" type="button">項目を追加</button>
+            </div>
+
+            <p class="helper-copy">
+              例: 勉強、筋トレ、読書、制作、資格勉強、研究。
+            </p>
+
+            <div id="effort-list" class="entry-list"></div>
+          </section>
+        </section>
+
+        <section class="panel output-panel">
+          <div class="section-heading">
+            <p class="eyebrow">Results</p>
+            <h2>時間の配分がそのまま出る</h2>
+            <p id="summary-copy">
+              入力したデータをもとに、これまでの累積時間をカテゴリ別に集計しています。
+            </p>
+          </div>
+
+          <div class="summary-grid">
+            <div class="summary-card">
+              <span>Total lifetime</span>
+              <strong id="total-hours">0時間</strong>
+            </div>
+            <div class="summary-card">
+              <span>Tracked share</span>
+              <strong id="largest-category">-</strong>
+            </div>
+          </div>
+
+          <div class="viz-tabs" role="tablist" aria-label="visualization tabs">
+            <button class="viz-tab active" type="button" role="tab" aria-selected="true" data-tab="dot">Dot</button>
+            <button class="viz-tab" type="button" role="tab" aria-selected="false" data-tab="pie">Pie</button>
+            <button class="viz-tab" type="button" role="tab" aria-selected="false" data-tab="bar">Bar</button>
+            <button class="viz-tab" type="button" role="tab" aria-selected="false" data-tab="report">Report</button>
+          </div>
+
+          <div class="viz-panels">
+            <section class="chart-card viz-panel active" data-panel="dot">
+              <div class="chart-head">
+                <p class="eyebrow">Dot Field</p>
+                <strong>小さなドットが徐々に侵食する</strong>
+              </div>
+              <div class="pie-wrap">
+                <div id="pie-chart" class="pie-chart" aria-hidden="true"></div>
+                <div class="pie-center">
+                  <span>lifetime total</span>
+                  <strong id="pie-total">0h</strong>
+                </div>
+              </div>
+            </section>
+
+            <section class="chart-card viz-panel" data-panel="pie">
+              <div class="chart-head">
+                <p class="eyebrow">Pie Chart</p>
+                <strong>人生全体に対する割合</strong>
+              </div>
+              <div class="classic-pie-wrap">
+                <div class="classic-pie-shell">
+                  <div id="classic-pie" class="classic-pie" aria-hidden="true"></div>
+                  <svg id="pie-hit-area" class="pie-hit-area" viewBox="0 0 100 100" aria-hidden="true"></svg>
+                  <div id="pie-tooltip" class="pie-tooltip" hidden>
+                    <strong id="pie-tooltip-title"></strong>
+                    <span id="pie-tooltip-copy"></span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="chart-card viz-panel" data-panel="bar">
+              <div class="chart-head">
+                <p class="eyebrow">Bar Chart</p>
+                <strong>人生全体に対する比較</strong>
+              </div>
+              <div id="bar-chart" class="bar-chart"></div>
+            </section>
+
+            <section class="chart-card viz-panel report-card" data-panel="report">
+              <div class="chart-head">
+                <p class="eyebrow">Report</p>
+                <strong>何時間分は何に相当するか</strong>
+              </div>
+              <div id="report-list" class="report-list"></div>
+            </section>
+          </div>
+
+          <section class="chart-card legend-card">
+            <div class="chart-head">
+              <p class="eyebrow">Legend</p>
+              <strong>カテゴリの内訳</strong>
+            </div>
+            <div id="legend" class="legend"></div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <template id="waste-template">
+      <article class="entry-card">
+        <div class="entry-top">
+          <label class="field">
+            <span>項目名</span>
+            <input data-name type="text" placeholder="YouTube" list="waste-suggestions" />
+          </label>
+          <button class="icon-button" data-remove type="button" aria-label="項目を削除">×</button>
+        </div>
+
+        <div class="entry-grid">
+          <label class="field">
+            <span>何歳から？</span>
+            <input data-start-age type="number" min="0" max="120" value="18" />
+          </label>
+          <label class="field">
+            <span>頻度 / 週</span>
+            <input data-frequency type="number" min="0" step="0.1" value="7" />
+          </label>
+          <label class="field">
+            <span>1回どれくらい？(分)</span>
+            <input data-duration type="number" min="0" step="1" value="60" />
+          </label>
+        </div>
+      </article>
+    </template>
+
+    <template id="habit-template">
+      <article class="entry-card">
+        <div class="entry-top">
+          <label class="field">
+            <span>項目名</span>
+            <input data-name type="text" placeholder="睡眠" />
+          </label>
+          <button class="icon-button" data-remove type="button" aria-label="項目を削除">×</button>
+        </div>
+
+        <div class="entry-grid">
+          <label class="field">
+            <span>何歳から？</span>
+            <input data-start-age type="number" min="0" max="120" value="0" />
+          </label>
+          <label class="field">
+            <span>1日あたり(時間)</span>
+            <input data-hours-per-day type="number" min="0" step="0.1" value="8" />
+          </label>
+          <label class="field">
+            <span>補足</span>
+            <input data-note type="text" placeholder="毎日ほぼ固定" />
+          </label>
+        </div>
+      </article>
+    </template>
+
+    <template id="effort-template">
+      <article class="entry-card">
+        <div class="entry-top">
+          <label class="field">
+            <span>項目名</span>
+            <input data-name type="text" placeholder="勉強" />
+          </label>
+          <button class="icon-button" data-remove type="button" aria-label="項目を削除">×</button>
+        </div>
+
+        <div class="entry-grid">
+          <label class="field">
+            <span>何歳から？</span>
+            <input data-start-age type="number" min="0" max="120" value="15" />
+          </label>
+          <label class="field">
+            <span>頻度 / 週</span>
+            <input data-frequency type="number" min="0" step="0.1" value="5" />
+          </label>
+          <label class="field">
+            <span>1回どれくらい？(分)</span>
+            <input data-duration type="number" min="0" step="1" value="90" />
+          </label>
+        </div>
+      </article>
+    </template>
+
+    <datalist id="waste-suggestions">
+      <option value="YouTube"></option>
+      <option value="Instagram"></option>
+      <option value="X"></option>
+      <option value="TikTok"></option>
+      <option value="Netflix"></option>
+      <option value="Shorts"></option>
+      <option value="Gaming"></option>
+      <option value="Porn"></option>
+      <option value="Aimless browsing"></option>
+      <option value="Gossip"></option>
+    </datalist>
+
+    <script src="./script.js"></script>
+  </body>
+</html>

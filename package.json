@@ -1,0 +1,10 @@
+{
+  "name": "life-ratio",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Static local site for visualizing lifetime time usage.",
+  "scripts": {
+    "dev": "python3 -m http.server 8000",
+    "start": "python3 -m http.server 8000"
+  }
+}
