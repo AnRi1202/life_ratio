@@ -993,8 +993,8 @@ t.defaultHabit.forEach(addHabit);
 t.defaultEffort.forEach(addEffort);
 
 setStage("input");
-setDotMode("all");
-setCompareMode("all");
+setDotMode("focused");
+setCompareMode("focused");
 setFlowStep("age");
 birthYearInput.max = String(new Date().getFullYear());
 render();

@@ -21,6 +21,7 @@ body {
   margin: 0;
   color: var(--text);
   font-family: "Manrope", "Noto Sans JP", "Helvetica Neue", sans-serif;
+  overflow-x: hidden;
   background:
     radial-gradient(circle at top left, rgba(131, 111, 159, 0.12), transparent 24%),
     radial-gradient(circle at 82% 0%, rgba(95, 125, 120, 0.14), transparent 26%),
@@ -496,6 +497,7 @@ input[data-name]::placeholder {
   display: inline-flex;
   gap: 10px;
   margin-right: auto;
+  min-width: 0;
 }
 
 .group-head {
@@ -1065,7 +1067,7 @@ input[data-name]::placeholder {
 
 @media (max-width: 680px) {
   .page-shell {
-    width: min(100% - 20px, 1220px);
+    width: min(1220px, calc(100% - 20px));
     padding-top: 18px;
   }
 
@@ -1098,6 +1100,17 @@ input[data-name]::placeholder {
   .panel-actions,
   .step-actions {
     display: grid;
+  }
+
+  .quick-add {
+    display: grid;
+    width: 100%;
+    margin-right: 0;
+  }
+
+  .quick-add > * {
+    min-width: 0;
+    width: 100%;
   }
 
   .entry-grid,
