@@ -581,7 +581,6 @@ const buildReport = (sortedItems, lifetimeHours, trackedHours, currentAge) => {
   if (topWaste) {
     const monthEquivalent = (topWaste.hours / (24 * 30)).toFixed(1);
     lines.push({
-      title: `${formatHoursLabel(topWaste.hours)} を ${topWaste.name} に使っている`,
       title: t.reportTopWasteTitle(formatHoursLabel(topWaste.hours), topWaste.name),
       body: t.reportTopWasteBody(monthEquivalent),
     });
