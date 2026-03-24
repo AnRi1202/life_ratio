@@ -1137,9 +1137,12 @@ input[data-name]::placeholder {
 
   .pie-chart {
     grid-template-columns: repeat(12, 1fr);
-    width: min(100%, 100%);
+    width: fit-content;
+    max-width: 100%;
     min-height: 420px;
     gap: 8px;
     border-radius: 24px;
+    margin-inline: auto;
+    justify-content: center;
   }
 }
